@@ -1,11 +1,17 @@
 "use client"
 
-import { Github, Linkedin, Mail, ArrowUp } from "lucide-react"
-import { motion } from "framer-motion"
-import { useState, useEffect } from "react"
+import { Github, Linkedin, Mail, ArrowUp } from "lucide-react";
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import type { ComponentType } from 'react';
 
 // --- Reusable Social Icon Component ---
-const SocialLink = ({ href, Icon, label }: { href: string; Icon: React.ElementType; label: string }) => (
+const SocialLink = ({ href, Icon, label }: { 
+    href: string; 
+    // Specify that Icon is a component that accepts a className prop
+    Icon: ComponentType<{ className?: string }>; 
+    label: string 
+}) => (
     <a
         href={href}
         target="_blank"
@@ -16,8 +22,7 @@ const SocialLink = ({ href, Icon, label }: { href: string; Icon: React.ElementTy
         <Icon className="w-5 h-5" />
     </a>
 );
-
-
+    
 export default function Footer() {
     const [isVisible, setIsVisible] = useState(false);
 
