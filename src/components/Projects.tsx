@@ -1,4 +1,5 @@
 "use client"
+import vrAssessmentImage from '../assets/images/vr_map2_T.png'
 
 import { ExternalLink, Github } from "lucide-react"
 import { Canvas, useFrame } from "@react-three/fiber"
@@ -60,10 +61,10 @@ const FeaturedProjectCard = ({ project }: { project: any }) => {
                     <img
                         src={project.image}
                         alt={project.title}
-                        className="w-full h-64 lg:h-full object-cover object-center filter grayscale group-hover:grayscale-0 transition-all duration-500"
+                        className="w-full h-64 lg:h-full object-cover object-center transition-all duration-500"
                         onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/800x600/000000/ef4444?text=IMAGE+N/A'; }}
                     />
-                    <div className="absolute inset-0 bg-red-900/50 mix-blend-multiply group-hover:bg-red-900/30 transition-all duration-500"></div>
+                    <div className="absolute inset-0 mix-blend-multiply transition-all duration-500"></div>
                 </div>
                 <div className="p-8 lg:w-2/5 flex flex-col">
                     <h3 className="text-2xl font-bold text-white mb-2 ">{project.title}</h3>
@@ -95,12 +96,12 @@ export default function Projects() {
       title: "VR 3D Assessment Game",
       description: "An immersive virtual reality experience developed in Unity for corporate training. Features complex interaction systems, performance tracking, and a dynamic environment that reacts to user input.",
       tech: ["Unity", "C#", "Oculus SDK", "Blender"],
-      image: "https://placehold.co/800x600/000000/ef4444?text=VR+Assessment",
+      image: vrAssessmentImage,
       github: "#",
       live: "#",
     },
     {
-      title: "Project: Outbreak",
+      title: "Outbreak",
       description: "A top-down survival game built for a 48-hour Game Jam. Features procedural level generation, enemy AI, and a real-time inventory system.",
       tech: ["Unity", "C#", "Aseprite"],
       image: "https://placehold.co/600x400/000000/f87171?text=Outbreak",
@@ -108,13 +109,21 @@ export default function Projects() {
       live: "#",
     },
     {
-      title: "Raturu: Portfolio Terminal",
+      title: "Raturu",
       description: "The very portfolio you are browsing now. A fully interactive web experience built with React and Three.js, featuring a cohesive sci-fi theme.",
       tech: ["React", "Three.js (R3F)", "Framer Motion", "TailwindCSS"],
       image: "https://placehold.co/600x400/000000/fca5a5?text=Raturu",
       github: "#",
       live: "#",
     },
+    {
+        title: "Freaky Hollow",
+        description: "The very portfolio you are browsing now. A fully interactive web experience built with React and Three.js, featuring a cohesive sci-fi theme.",
+        tech: ["React", "Three.js (R3F)", "Framer Motion", "TailwindCSS"],
+        image: "https://placehold.co/600x400/000000/fca5a5?text=Raturu",
+        github: "#",
+        live: "#",
+      },
   ];
 
   const featuredProject = projects[0];
@@ -143,14 +152,14 @@ export default function Projects() {
         <div className="space-y-16">
             {/* Featured Project Section */}
             <div>
-                <h3 className="text-2xl  text-red-400 mb-4 pl-4 border-l-4 border-red-500">[ Featured File ]</h3>
+                <h3 className="text-2xl  text-red-400 mb-4 pl-4 border-l-4 border-red-500">[ New Project ]</h3>
                 <FeaturedProjectCard project={featuredProject} />
             </div>
 
             {/* --- NEW: Archived Files Section (Tabbed Interface) --- */}
             {otherProjects.length > 0 && (
                 <div>
-                    <h3 className="text-2xl  text-red-400 mb-4 pl-4 border-l-4 border-red-500">[ Archived Files ]</h3>
+                    <h3 className="text-2xl  text-red-400 mb-4 pl-4 border-l-4 border-red-500">[ Other Project ]</h3>
                     <div className="flex flex-col md:flex-row gap-8 border border-white/10 rounded-2xl p-4 backdrop-blur-sm bg-black/50">
                         {/* File Tabs */}
                         <div className="flex md:flex-col overflow-x-auto md:overflow-x-visible md:w-1/4 pb-2 md:pb-0">

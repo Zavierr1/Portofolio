@@ -111,21 +111,27 @@ export default function About() {
                         <div className="relative">
                             <div className="absolute -left-[34px] top-1 w-4 h-4 bg-red-500 rounded-full border-4 border-black"></div>
                             <p className="font-mono text-red-300">Q1 2024</p>
-                            <h4 className="font-semibold text-white">Genesis: The Journey Begins</h4>
+                            <h4 className="font-semibold text-white">Game Developer Concentration</h4>
                             <p className="text-sm text-gray-400">Embarked on an intensive learning path, focusing on the core principles of game development and software engineering.</p>
                         </div>
                         {/* Timeline Item 2 */}
                         <div className="relative">
                             <div className="absolute -left-[34px] top-1 w-4 h-4 bg-red-500 rounded-full border-4 border-black"></div>
                             <p className="font-mono text-red-300">Q2 2024</p>
-                            <h4 className="font-semibold text-white">First Contact: Game Jam</h4>
+                            <h4 className="font-semibold text-white">GIMJAM ITB (Game Jam)</h4>
+                            <p className="text-sm text-gray-400">Competed in a 48-hour Game Jam, successfully designing, developing, and deploying a complete game under a strict deadline.</p>
+                        </div>
+                        <div className="relative">
+                            <div className="absolute -left-[34px] top-1 w-4 h-4 bg-red-500 rounded-full border-4 border-black"></div>
+                            <p className="font-mono text-red-300">Q3 2024</p>
+                            <h4 className="font-semibold text-white">Mid Exam</h4>
                             <p className="text-sm text-gray-400">Competed in a 48-hour Game Jam, successfully designing, developing, and deploying a complete game under a strict deadline.</p>
                         </div>
                         {/* Timeline Item 3 */}
                         <div className="relative">
                             <div className="absolute -left-[34px] top-1 w-4 h-4 bg-red-500 rounded-full border-4 border-black"></div>
                             <p className="font-mono text-red-300">Present</p>
-                            <h4 className="font-semibold text-white">Project Nexus: Full-Stack Integration</h4>
+                            <h4 className="font-semibold text-white">President University x PT. Mattel Indonesia</h4>
                             <p className="text-sm text-gray-400">Expanding my skill set by bridging gameplay with web platforms, utilizing React and Node.js to create interconnected experiences.</p>
                         </div>
                     </div>

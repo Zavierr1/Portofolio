@@ -27,7 +27,7 @@ function TransmissionBackground() {
     return positions;
   }, []);
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     // Animate background particles
     if (particlesRef.current) {
         const positions = particlesRef.current.geometry.attributes.position.array as Float32Array;
@@ -214,9 +214,9 @@ export default function Contact() {
                 <h3 className="text-2xl font-bold mb-6 text-white">Contact Coordinates</h3>
                 <motion.div className="space-y-4" variants={cardVariants}>
                   {[
-                    { icon: Mail, label: "Signal", value: "fadeljafir@gmail.com" },
-                    { icon: Phone, label: "Frequency", value: "0878-2607-8588" },
-                    { icon: MapPin, label: "Nexus", value: "Bekasi, Indonesia" },
+                    { icon: Mail, label: "Email", value: "fadeljafir@gmail.com" },
+                    { icon: Phone, label: "Phone Number", value: "0878-2607-8588" },
+                    { icon: MapPin, label: "Location", value: "North Cikarang, Bekasi" },
                   ].map(({ icon: Icon, label, value }) => (
                     <motion.div 
                         key={label} 
