@@ -45,7 +45,7 @@ function SkillGlyph({ level, isHovered }: { level: string; isHovered: boolean })
   const particlesRef = useRef<THREE.Points>(null)
   const sphere = useMemo(() => random.inSphere(new Float32Array(5000), { radius: 1.8 }), [])
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (meshRef.current) meshRef.current.rotation.y += 0.005
     if (particlesRef.current) particlesRef.current.rotation.y += 0.002
     if (materialRef.current) {
@@ -169,7 +169,7 @@ export default function Skills() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
-          <GlitchTitle text="Arsenal" />
+          <GlitchTitle text="Skills" />
           <div className="w-24 h-1 bg-gradient-to-r from-red-600 to-red-400 mx-auto rounded-full mb-6"></div>
           <p className="text-gray-300 max-w-2xl mx-auto">
             A curated collection of my core competencies. Drag to explore each category.

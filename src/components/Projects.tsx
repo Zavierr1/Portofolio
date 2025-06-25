@@ -3,7 +3,7 @@
 import { ExternalLink, Github } from "lucide-react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { Stars } from "@react-three/drei"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, type Variants } from "framer-motion"
 import { useRef, useState } from "react"
 import * as THREE from "three"
 import { useInView } from "react-intersection-observer"
@@ -41,7 +41,7 @@ const GlitchTitle = ({ text }: { text: string }) => {
 const FeaturedProjectCard = ({ project }: { project: any }) => {
     const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
 
-    const cardVariants = {
+    const cardVariants: Variants = {
         hidden: { opacity: 0, y: 50 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
     }
@@ -133,7 +133,7 @@ export default function Projects() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
-          <GlitchTitle text="Case Files" />
+          <GlitchTitle text="Projects" />
           <div className="w-24 h-1 bg-gradient-to-r from-red-600 to-red-400 mx-auto rounded-full mb-6"></div>
           <p className="text-gray-300 max-w-2xl mx-auto">
             A selection of my projects. Each represents a unique challenge and a story of development.

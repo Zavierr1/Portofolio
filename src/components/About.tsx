@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, type Variants } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { Stars } from "@react-three/drei"
@@ -43,7 +43,7 @@ const GlitchTitle = ({ text }: { text: string }) => {
 const DataPod = ({ title, children, delay = 0 }: { title: string, children: React.ReactNode, delay?: number }) => {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
 
-  const variants = {
+  const variants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100, delay } }
   }
@@ -77,7 +77,7 @@ export default function About() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
-          <GlitchTitle text="Personnel File" />
+          <GlitchTitle text="About Me" />
           <div className="w-24 h-1 bg-gradient-to-r from-red-600 to-red-400 mx-auto rounded-full"></div>
         </div>
 

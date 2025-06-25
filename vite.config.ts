@@ -8,4 +8,8 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  base: "/Portofolio/",
+  build: {
+    chunkSizeWarningLimit: 1000, // Increase the limit to 1000 kB
+  },
 })

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, type Variants } from "framer-motion"
 import { Menu, X } from "lucide-react"
 import * as Tone from 'tone'
 
@@ -62,7 +62,7 @@ export default function Navbar() {
     synth.current.triggerAttackRelease("C5", "8n");
   };
 
-  const mobileMenuVariants = {
+  const mobileMenuVariants: Variants = {
     open: {
       clipPath: `circle(120% at 90% 40px)`,
       transition: { type: "spring", stiffness: 40, restDelta: 2 }

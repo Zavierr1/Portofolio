@@ -1,11 +1,11 @@
 "use client"
 
-import { ArrowDown, ArrowRight, Github, Linkedin, Mail } from "lucide-react"
+import { ArrowRight, Github, Linkedin, Mail } from "lucide-react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { Stars } from "@react-three/drei"
 import { useRef } from "react"
 import * as THREE from "three"
-import { motion } from "framer-motion"
+import { motion, type Variants } from "framer-motion"
 import { TypeAnimation } from "react-type-animation"
 
 // --- NEW: 3D Background Component ---
@@ -36,7 +36,7 @@ function Hero3DBackground() {
 export default function Hero() {
 
   // --- NEW: Framer Motion animation variants ---
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -44,7 +44,7 @@ export default function Hero() {
     },
   }
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { y: 20, opacity: 0 },
     visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100 } },
   }
@@ -71,14 +71,14 @@ export default function Hero() {
           <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-red-400/50"></div>
           <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-red-400/50"></div>
 
-          <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 font-mono">
+          <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4">
             <span className="bg-gradient-to-r from-white via-red-200 to-red-500 bg-clip-text text-transparent">
               Muhammad Fadel
             </span>
           </motion.h1>
 
           {/* --- UPDATED: "Live" Typing Animation --- */}
-          <motion.div variants={itemVariants} className="text-xl md:text-2xl lg:text-3xl text-red-400 mb-6 font-mono h-10">
+          <motion.div variants={itemVariants} className="text-xl md:text-2xl lg:text-3xl text-red-400 mb-6  h10">
             <TypeAnimation
               sequence={[
                 "<Game Developer />",
@@ -86,7 +86,7 @@ export default function Hero() {
                 "<Problem Solver />",
                 2000,
                 "<Creative Coder />",
-                2000,
+                2000, 
               ]}
               wrapper="span"
               speed={50}
