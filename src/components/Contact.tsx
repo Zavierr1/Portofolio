@@ -1,127 +1,80 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef, Suspense, useMemo } from "react"
+import { useState } from "react"
 import emailjs from "@emailjs/browser"
 import { Mail, Phone, MapPin, Send, Loader2, CheckCircle, AlertTriangle } from "lucide-react"
-import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { Stars, Float } from "@react-three/drei"
 import { motion, type Variants } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import * as THREE from "three"
 
-// --- ENHANCED: Mouse-Reactive Transmission Background ---
-function TransmissionBackground() {
-  const { viewport, mouse } = useThree();
-  const particlesRef = useRef<THREE.Points>(null);
-  const groupRef = useRef<THREE.Group>(null);
+// --- Reusable Grid Pattern (from other sections) ---
+const GridPattern = () => (
+  <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] opacity-10 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
+);
 
-  const particles = useMemo(() => {
-    const count = 500;
-    const positions = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-        positions[i * 3] = (Math.random() - 0.5) * 15;
-        positions[i * 3 + 1] = (Math.random() - 0.5) * 15;
-        positions[i * 3 + 2] = Math.random() * -60;
-    }
-    return positions;
-  }, []);
-
-  useFrame((_, delta) => {
-    // Animate background particles
-    if (particlesRef.current) {
-        const positions = particlesRef.current.geometry.attributes.position.array as Float32Array;
-        for (let i = 0; i < positions.length; i += 3) {
-            positions[i + 2] += delta * 12;
-            if (positions[i + 2] > 10) {
-                positions[i + 2] = -50;
-            }
-        }
-        particlesRef.current.geometry.attributes.position.needsUpdate = true;
-    }
-    
-    // Make the whole scene react to mouse movement for a parallax effect
-    if (groupRef.current) {
-      const x = (mouse.x * viewport.width) / 100;
-      const y = (mouse.y * viewport.height) / 100;
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, x, 0.02);
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, -y, 0.02);
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-        <Stars radius={80} depth={50} count={5000} factor={7} saturation={0} fade speed={1.5} />
-        <points ref={particlesRef}>
-            <bufferGeometry attach="geometry">
-                <bufferAttribute attach="attributes-position" 
-                args={[particles, 3]} />
-            </bufferGeometry>
-            <pointsMaterial attach="material" size={0.05} color="#ef4444" />
-        </points>
-        <Float speed={0.5} rotationIntensity={1} floatIntensity={1.5}>
-           <mesh position={[5, -5, -20]}>
-               <icosahedronGeometry args={[0.5, 0]} />
-               <meshStandardMaterial wireframe color="#f87171" emissive="#f87171" emissiveIntensity={0.2} />
-           </mesh>
-        </Float>
-         <Float speed={0.7} rotationIntensity={0.8} floatIntensity={1.2}>
-           <mesh position={[-5, 5, -30]}>
-               <boxGeometry args={[0.8, 0.8, 0.8]} />
-               <meshStandardMaterial wireframe color="#fca5a5" emissive="#fca5a5" emissiveIntensity={0.2} />
-           </mesh>
-        </Float>
-         <Float speed={0.6} rotationIntensity={1.2} floatIntensity={1}>
-           <mesh position={[6, 6, -45]}>
-               <torusKnotGeometry args={[0.4, 0.08, 100, 16]}/>
-               <meshStandardMaterial wireframe color="#ef4444" emissive="#ef4444" emissiveIntensity={0.1} />
-           </mesh>
-        </Float>
-    </group>
-  );
+// --- Reusable Animated Title (from other sections) ---
+const AnimatedTitle = ({ text }: { text: string }) => {
+    return (
+        <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <span className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+                {text}
+            </span>
+        </h2>
+    )
 }
 
-// --- Reusable Glitch Title (Unchanged) ---
-const GlitchTitle = ({ text }: { text: string }) => (
-  <h2 className="text-4xl md:text-5xl font-bold mb-4 glitch-container" data-text={text}>
-      <span className="bg-gradient-to-r from-red-500 to-red-300 bg-clip-text text-transparent">{text}</span>
-  </h2>
-)
-
-// --- ENHANCED: Interactive Globe with Pulsing Rings ---
-const ContactGlobe = () => {
-  const groupRef = useRef<THREE.Group>(null);
-  const ring1 = useRef<THREE.MeshStandardMaterial>(null);
-  const ring2 = useRef<THREE.MeshStandardMaterial>(null);
-
-  useFrame(({ clock }) => {
-      if(groupRef.current) {
-          groupRef.current.rotation.y += 0.002;
-      }
-      // Create a subtle pulsing effect on the rings
-      if(ring1.current && ring2.current) {
-          const pulse = (Math.sin(clock.getElapsedTime() * 2) + 1) / 2; // oscillates between 0 and 1
-          ring1.current.emissiveIntensity = 0.3 + pulse * 0.5;
-          ring2.current.emissiveIntensity = 0.3 + (1-pulse) * 0.5;
-      }
-  })
-  return (
-      <group ref={groupRef}>
-          <mesh>
-              <sphereGeometry args={[1, 32, 32]} />
-              <meshStandardMaterial wireframe color="#ef4444" emissive="#ef4444" emissiveIntensity={0.1} />
-          </mesh>
-          <mesh rotation-x={Math.PI / 2}>
-              <torusGeometry args={[1.2, 0.01, 16, 100]} />
-              <meshStandardMaterial ref={ring1} color="#f87171" emissive="#f87171" />
-          </mesh>
-          <mesh rotation-x={Math.PI / 2} rotation-y={Math.PI / 4}>
-              <torusGeometry args={[1.4, 0.008, 16, 100]} />
-              <meshStandardMaterial ref={ring2} color="#fca5a5" emissive="#fca5a5" />
-          </mesh>
-      </group>
-  )
+// --- NEW: Animated SVG Icon ---
+const AnimatedContactIcon = () => {
+    return (
+        <motion.div
+            className="w-full h-full flex items-center justify-center"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+            <svg width="100%" height="100%" viewBox="0 0 200 200" className="max-w-[250px] max-h-[250px]">
+                <motion.circle
+                    cx="100" cy="100" r="80"
+                    fill="none"
+                    stroke="url(#gradient-ring)"
+                    strokeWidth="2"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    transition={{ duration: 1, ease: "circOut" }}
+                />
+                <motion.circle
+                    cx="100" cy="100" r="65"
+                    fill="url(#gradient-fill)"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.7, delay: 0.5, type: "spring", stiffness: 100 }}
+                />
+                <motion.path
+                    d="M50 80 H150 V130 H50 Z M50 80 L100 110 L150 80"
+                    stroke="#fff"
+                    strokeWidth="5"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    transition={{ duration: 1, delay: 1, ease: "easeInOut" }}
+                />
+                <defs>
+                    <radialGradient id="gradient-fill">
+                        <stop offset="0%" stopColor="#fb923c" />
+                        <stop offset="100%" stopColor="#f97316" />
+                    </radialGradient>
+                    <linearGradient id="gradient-ring" x1="0%" y1="0%" x2="100%" y2="100%">
+                         <stop offset="0%" stopColor="#f97316" />
+                         <stop offset="100%" stopColor="#fdba74" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </motion.div>
+    )
 }
+
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" })
@@ -174,16 +127,8 @@ export default function Contact() {
   }
 
   return (
-    // ADDED: A subtle animated scan-line effect via CSS
-    <section id="contact" className="py-20 md:py-32 relative overflow-hidden bg-black scan-lines-bg">
-      <div className="absolute inset-0 z-0 opacity-40">
-        <Canvas camera={{ position: [0, 0, 10], fov: 75 }}>
-          <ambientLight intensity={0.5} />
-          <Suspense fallback={null}>
-            <TransmissionBackground />
-          </Suspense>
-        </Canvas>
-      </div>
+    <section id="contact" className="py-20 md:py-32 relative overflow-hidden bg-orange-50">
+      <GridPattern />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div 
@@ -193,10 +138,10 @@ export default function Contact() {
             viewport={{ once: true, amount: 0.8 }}
             transition={{duration: 0.8, ease: "easeOut"}}
         >
-          <GlitchTitle text="Open Channel" />
-          <div className="w-24 h-1 bg-gradient-to-r from-red-600 to-red-400 mx-auto rounded-full mb-6"></div>
-          <p className="text-gray-300 max-w-2xl mx-auto text-base md:text-lg">
-            Have a project, a question, or just want to connect? Send a transmission.
+          <AnimatedTitle text="Get In Touch" />
+          <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-amber-400 mx-auto rounded-full mb-6"></div>
+          <p className="text-gray-700 max-w-2xl mx-auto text-base md:text-lg">
+            Have a project, a question, or just want to connect? Send me a message.
           </p>
         </motion.div>
 
@@ -205,108 +150,86 @@ export default function Contact() {
             variants={cardVariants}
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
-            // IMPROVED: Responsive padding and background effect
-            className="grid lg:grid-cols-2 gap-8 backdrop-blur-xl bg-black/60 border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl hud-grid-bg"
+            className="grid lg:grid-cols-2 gap-8 bg-white/70 backdrop-blur-md border border-orange-200/50 rounded-2xl p-6 sm:p-8 shadow-lg"
         >
-          {/* --- LEFT SIDE: Info & Globe --- */}
+          {/* --- LEFT SIDE: Info & Icon --- */}
           <div className="flex flex-col justify-between">
               <div>
-                <h3 className="text-2xl font-bold mb-6 text-white">Contact Coordinates</h3>
-                <motion.div className="space-y-4" variants={cardVariants}>
-                  {[
-                    { icon: Mail, label: "Email", value: "fadeljafir@gmail.com" },
-                    { icon: Phone, label: "Phone Number", value: "0878-2607-8588" },
-                    { icon: MapPin, label: "Location", value: "North Cikarang, Bekasi" },
-                  ].map(({ icon: Icon, label, value }) => (
-                    <motion.div 
-                        key={label} 
-                        className="flex items-center space-x-4 group cursor-pointer" 
-                        onClick={() => handleCopy(value, label)}
-                        variants={itemVariants}
-                    >
-                      <div className="p-3 rounded-full bg-red-500/10 border border-red-500/20 group-hover:bg-red-500/20 group-hover:scale-110 transition-all duration-300">
-                        <Icon className="w-5 h-5 text-red-400" />
-                      </div>
-                      <div>
-                        <div className="text-xs text-gray-400 uppercase tracking-wider">{label}</div>
-                        <div className="text-sm text-white transition-colors">{copied === label ? "Copied!" : value}</div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </motion.div>
+                  <h3 className="text-2xl font-bold mb-6 text-gray-800">Contact Information</h3>
+                  <motion.div className="space-y-4" variants={cardVariants}>
+                    {[
+                      { icon: Mail, label: "Email", value: "fadeljafir@gmail.com" },
+                      { icon: Phone, label: "Phone Number", value: "0878-2607-8588" },
+                      { icon: MapPin, label: "Location", value: "North Cikarang, Bekasi" },
+                    ].map(({ icon: Icon, label, value }) => (
+                      <motion.div 
+                          key={label} 
+                          className="flex items-center space-x-4 group cursor-pointer" 
+                          onClick={() => handleCopy(value, label)}
+                          variants={itemVariants}
+                      >
+                        <div className="p-3 rounded-full bg-orange-100 border border-orange-200/80 group-hover:bg-orange-200 group-hover:scale-110 transition-all duration-300">
+                          <Icon className="w-5 h-5 text-orange-600" />
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-500 uppercase tracking-wider">{label}</div>
+                          <div className="text-sm text-gray-700 font-medium transition-colors">{copied === label ? "Copied!" : value}</div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </motion.div>
               </div>
-              {/* IMPROVED: Responsive height for the globe canvas */}
-              <div className="relative w-full h-56 lg:h-72 mt-8 opacity-50 hover:opacity-75 transition-opacity duration-500">
-                <Canvas camera={{position: [0, 0, 2.5], fov: 75}}>
-                  <ambientLight intensity={1} />
-                  <pointLight position={[10, 10, 10]} intensity={100} color="#ef4444"/>
-                  <Suspense fallback={null}><ContactGlobe /></Suspense>
-                </Canvas>
+              <div className="relative w-full h-56 lg:h-64 mt-8">
+                <AnimatedContactIcon />
               </div>
           </div>
 
-          {/* --- RIGHT SIDE: Organized Contact Form --- */}
-          <div className="border-t-2 lg:border-t-0 lg:border-l-2 border-red-500/20 pt-8 lg:pt-0 lg:pl-8">
+          {/* --- RIGHT SIDE: Contact Form --- */}
+          <div className="border-t-2 lg:border-t-0 lg:border-l-2 border-orange-200/50 pt-8 lg:pt-0 lg:pl-8">
              <form onSubmit={handleSubmit} className="space-y-6">
                <div>
-                   <label htmlFor="name" className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">Your Name</label>
-                   {/* IMPROVED: Consistent input styling */}
-                   <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required className="form-input" placeholder="Enter your callsign"/>
+                   <label htmlFor="name" className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Your Name</label>
+                   <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required className="form-input-orange" placeholder="Enter your name"/>
                </div>
                <div>
-                   <label htmlFor="email" className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">Your Email</label>
-                   <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required className="form-input" placeholder="Enter your comms link"/>
+                   <label htmlFor="email" className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Your Email</label>
+                   <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required className="form-input-orange" placeholder="Enter your email address"/>
                </div>
                <div>
-                 <label htmlFor="message" className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">Message</label>
-                 <textarea id="message" name="message" value={formData.message} onChange={handleChange} required rows={5} className="form-input" placeholder="Begin transmission..."></textarea>
+                <label htmlFor="message" className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Message</label>
+                <textarea id="message" name="message" value={formData.message} onChange={handleChange} required rows={5} className="form-input-orange" placeholder="Your message here..."></textarea>
                </div>
                <div>
-                 {/* IMPROVED: Responsive button styling */}
-                 <motion.button
-                      type="submit"
-                      disabled={isSubmitting}
-                      // --- TAP ANIMATION ---
-                      whileHover={{ scale: 1.02, y: -2 }} // Slightly less scale for a full-width element
-                      whileTap={{ scale: 0.99 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                      // --- RESPONSIVE & ENHANCED STYLING ---
-                      className="
-                          w-full                           // Consistently full-width
-                          flex items-center justify-center gap-x-2
-                          px-8 py-3
-                          font-semibold text-white
-                          bg-gradient-to-r from-red-600 to-red-500
-                          rounded-lg
-                          transition-all duration-300
-                          shadow-lg hover:shadow-xl hover:shadow-red-500/30
-                          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-black
-                          disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 disabled:y-0
-                      "
-                  >
-                      {isSubmitting ? (
-                          <>
-                              <Loader2 size={20} className="animate-spin" />
-                              <span>Encrypting...</span>
-                          </>
-                      ) : (
-                          <>
-                              <Send size={18} />
-                              <span>Transmit Message</span>
-                          </>
-                      )}
-                  </motion.button>
+                <motion.button
+                    type="submit"
+                    disabled={isSubmitting}
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.99 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                    className="w-full flex items-center justify-center gap-x-2 px-8 py-3 font-semibold text-white bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-orange-500/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:ring-offset-orange-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? (
+                      <>
+                          <Loader2 size={20} className="animate-spin" />
+                          <span>Sending...</span>
+                      </>
+                  ) : (
+                      <>
+                          <Send size={18} />
+                          <span>Send Message</span>
+                      </>
+                  )}
+                </motion.button>
                </div>
                
-               {submissionStatus && (
-                   <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`text-center p-3 rounded-lg text-sm flex items-center justify-center gap-2 ${submissionStatus === 'success' ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
+              {submissionStatus && (
+                  <motion.div 
+                   initial={{ opacity: 0, y: 10 }}
+                   animate={{ opacity: 1, y: 0 }}                   className={`text-center p-3 rounded-lg text-sm flex items-center justify-center gap-2 ${submissionStatus === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                      {submissionStatus === 'success' ? <CheckCircle size={18}/> : <AlertTriangle size={18} />}
-                     {submissionStatus === 'success' ? "Transmission received. Standing by." : "Connection failed. Check signal."}
-                   </motion.div>
-               )}
+                     {submissionStatus === 'success' ? "Message sent successfully!" : "An error occurred. Please try again."}
+                  </motion.div>
+              )}
              </form>
           </div>
         </motion.div>

@@ -81,25 +81,26 @@ export default function Navbar() {
   const mobileLinkVariants = {
       open: { y: 0, opacity: 1, transition: { y: { stiffness: 1000, velocity: -100 } } },
       closed: { y: 50, opacity: 0, transition: { y: { stiffness: 1000 } } }
-  };
-
-  return (
+  };  return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-colors duration-300 ${
-        scrolled || isOpen ? "bg-black/70 backdrop-blur-xl border-b border-red-500/20" : "bg-transparent"
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${        scrolled || isOpen 
+          ? "bg-white/10 border-b border-white/20 shadow-2xl shadow-orange-500/10" 
+          : "bg-white/5"
       }`}
+      style={{
+        backdropFilter: scrolled || isOpen ? 'blur(20px) saturate(180%)' : 'blur(8px)',
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="flex justify-between items-center py-4">
-          <div className="flex items-center space-x-4">
-            {/* Logo with Glitch Effect */}
-            <a href="#home" className="text-2xl font-bold glitch-container" onClick={() => setActiveSection("home")} aria-label="Home">
-              <span className="bg-gradient-to-r from-red-500 to-red-300 bg-clip-text text-transparent" data-text="Zavier">
+          <div className="flex items-center space-x-4">            {/* Logo with Modern Orange Gradient */}
+            <a href="#home" className="text-2xl font-bold" onClick={() => setActiveSection("home")} aria-label="Home">
+              <span className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 bg-clip-text text-transparent font-bold" data-text="Zavier">
                 Zavier
               </span>
             </a>
-            {/* --- NEW: System Status Indicator --- */}
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            {/* System Status Indicator */}
+            <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
           </div>
 
           {/* Desktop Navigation */}
@@ -109,19 +110,18 @@ export default function Navbar() {
                 key={item.href}
                 href={item.href}
                 onMouseEnter={playHoverSound}
-                onClick={() => setActiveSection(item.id)}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${
-                   activeSection === item.id ? "text-white" : "text-gray-400 hover:text-white"
+                onClick={() => setActiveSection(item.id)}                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${
+                   activeSection === item.id ? "text-orange-600" : "text-gray-700 hover:text-orange-500"
                 }`}
                 aria-current={activeSection === item.id ? "page" : undefined}
               >
-                {item.label}
-                {/* --- UPDATED: Active Indicator --- */}
+                {item.label}                {/* --- UPDATED: Active Indicator with Glassmorphism --- */}
                 {activeSection === item.id && (
                   <motion.div
-                    className="absolute inset-0 border-2 border-red-500/80 rounded-lg"
+                    className="absolute inset-0 bg-gradient-to-r from-orange-500/30 to-orange-400/30 backdrop-blur-sm border border-orange-500/40 rounded-lg shadow-lg"
                     layoutId="active-box"
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    style={{ backdropFilter: 'blur(8px) saturate(120%)' }}
                   />
                 )}
               </a>
@@ -130,27 +130,32 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <motion.nav initial={false} animate={isOpen ? "open" : "closed"}>
-                 <motion.button 
-                    className="relative z-50 text-white p-2"
+            <motion.nav initial={false} animate={isOpen ? "open" : "closed"}>                 <motion.button 
+                    className="relative z-50 text-gray-700 p-2"
                     onClick={() => setIsOpen(!isOpen)} 
                     aria-label={isOpen ? "Close menu" : "Open menu"}
                     aria-expanded={isOpen}
                  >
                     {isOpen ? <X size={24} /> : <Menu size={24} />}
                 </motion.button>
-              <motion.div className="absolute top-0 right-0 bottom-0 w-full bg-black/90 backdrop-blur-md" variants={mobileMenuVariants} style={{height: '100vh'}} />
+              <motion.div 
+                className="absolute top-0 right-0 bottom-0 w-full bg-gradient-to-br from-white/20 via-orange-50/30 to-orange-100/40 backdrop-blur-2xl border-l border-white/30 shadow-2xl" 
+                variants={mobileMenuVariants} 
+                style={{
+                  height: '100vh',
+                  backdropFilter: 'blur(20px) saturate(180%)',
+                }} 
+              />
               <motion.div
                   className="absolute top-24 left-0 w-full"
                   variants={mobileLinkContainerVariants}
                   aria-hidden={!isOpen}
               >
                   {navItems.map((item) => (
-                      <motion.div key={item.href} variants={mobileLinkVariants} className="px-8 py-2">
-                          <a
+                      <motion.div key={item.href} variants={mobileLinkVariants} className="px-8 py-2">                          <a
                               href={item.href}
                               className={`block text-2xl text-center font-medium transition-colors ${
-                                  activeSection === item.id ? "text-red-400" : "text-gray-300"
+                                  activeSection === item.id ? "text-orange-600" : "text-gray-700"
                               }`}
                               onClick={() => setIsOpen(false)}
                           >
