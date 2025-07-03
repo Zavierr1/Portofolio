@@ -93,14 +93,15 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="flex justify-between items-center py-4">
-          <div className="flex items-center space-x-4">            {/* Logo with Modern Orange Gradient */}
+          <div className="flex items-center space-x-4">            
+            {/* Logo with Modern Orange Gradient */}
             <a href="#home" className="text-2xl font-bold" onClick={() => setActiveSection("home")} aria-label="Home">
               <span className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 bg-clip-text text-transparent font-bold" data-text="Zavier">
                 Zavier
               </span>
             </a>
             {/* System Status Indicator */}
-            <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
           </div>
 
           {/* Desktop Navigation */}

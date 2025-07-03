@@ -3,7 +3,7 @@
 
 @layer base {
     html {
-      @apply scroll-smooth scrollbar-thin scrollbar-thumb-red-400 scrollbar-track-slate-950  ;
+      @apply scroll-smooth scrollbar-thin scrollbar-thumb-orange-400 scrollbar-track-slate-250;
     }
   }
 
