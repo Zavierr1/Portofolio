@@ -152,14 +152,6 @@ export default function Skills() {
     <section id="skills" className="py-20 relative overflow-hidden bg-orange-50">
       {/* Grid Pattern Background (matching About.tsx) */}
       <GridPattern />
-
-      {/* Floating Orange Elements for Visual Interest */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-br from-orange-300/20 to-amber-400/10 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-br from-amber-300/15 to-orange-500/8 rounded-full animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-orange-200/15 to-amber-300/8 rounded-full animate-pulse delay-500"></div>
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
           <AnimatedTitle text="Skills" />

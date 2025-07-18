@@ -28,14 +28,6 @@ export default function Hero() {
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-orange-50">
       {/* Grid Pattern Background (matching About.tsx) */}
       <GridPattern />
-      
-      {/* Floating Orange Elements for Visual Interest */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-br from-orange-300/20 to-amber-400/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-br from-amber-300/15 to-orange-500/8 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-orange-200/15 to-amber-300/8 rounded-full blur-3xl animate-pulse delay-500"></div>
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">        {/* Glassmorphism Card with Light Orange Theme (matching About.tsx) */}
         <motion.div
           className="relative backdrop-blur-sm bg-white/60 border border-orange-200/50 rounded-3xl p-8 md:p-12 shadow-lg hover:shadow-xl transition-all duration-300"
@@ -48,7 +40,6 @@ export default function Hero() {
           <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-orange-400/70 rounded-br-lg"></div>
           
           {/* Floating accent elements */}
-          <div className="absolute top-6 right-6 w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
           <div className="absolute bottom-6 left-6 w-1 h-1 bg-amber-400 rounded-full animate-ping"></div>          <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4">
             <span className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
               Muhammad Fadel
