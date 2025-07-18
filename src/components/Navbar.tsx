@@ -1,9 +1,8 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
-import { motion, type Variants } from "framer-motion"
-import { Menu, X } from "lucide-react"
-import * as Tone from 'tone'
+import { useState, useEffect } from "react";
+import { motion, type Variants } from "framer-motion";
+import { Menu, X } from "lucide-react";
 
 // --- Types remain the same ---
 interface NavItem {
@@ -18,22 +17,21 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<SectionId>("home");
 
-  // --- NEW: Ref to hold the Tone.js synth to prevent re-creation ---
-  const synth = useRef<Tone.Synth | null>(null);
-
   const navItems: NavItem[] = [
-    { href: "#home",     label: "Home",     id: "home" },
-    { href: "#about",    label: "About",    id: "about" },
-    { href: "#skills",   label: "Skills",   id: "skills" },
+    { href: "#home", label: "Home", id: "home" },
+    { href: "#about", label: "About", id: "about" },
+    { href: "#skills", label: "Skills", id: "skills" },
     { href: "#projects", label: "Projects", id: "projects" },
-    { href: "#contact",  label: "Contact",  id: "contact" },
+    { href: "#contact", label: "Contact", id: "contact" },
   ];
 
   // Effect for scroll handling to determine active section and navbar background
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
-      const sections = navItems.map(item => document.querySelector<HTMLElement>(item.href));
+      const sections = navItems.map((item) =>
+        document.querySelector<HTMLElement>(item.href)
+      );
       const scrollPosition = window.scrollY + window.innerHeight / 3;
 
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -49,54 +47,56 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []); // navItems is stable
 
-  // --- NEW: Function to play a sound on hover ---
-  const playHoverSound = () => {
-    // Initialize the synth on the first interaction
-    if (!synth.current) {
-      synth.current = new Tone.Synth({
-        oscillator: { type: 'sine' },
-        envelope: { attack: 0.005, decay: 0.1, sustain: 0.3, release: 0.1 }
-      }).toDestination();
-    }
-    // Play a short, high-pitched note
-    synth.current.triggerAttackRelease("C5", "8n");
-  };
-
   const mobileMenuVariants: Variants = {
     open: {
       clipPath: `circle(120% at 90% 40px)`,
-      transition: { type: "spring", stiffness: 40, restDelta: 2 }
+      transition: { type: "spring", stiffness: 40, restDelta: 2 },
     },
     closed: {
       clipPath: "circle(24px at 90% 40px)",
-      transition: { delay: 0.2, type: "spring", stiffness: 400, damping: 40 }
-    }
+      transition: { delay: 0.2, type: "spring", stiffness: 400, damping: 40 },
+    },
   };
-  
+
   const mobileLinkContainerVariants = {
-      open: { transition: { staggerChildren: 0.07, delayChildren: 0.2 } },
-      closed: { transition: { staggerChildren: 0.05, staggerDirection: -1 } }
+    open: { transition: { staggerChildren: 0.07, delayChildren: 0.2 } },
+    closed: { transition: { staggerChildren: 0.05, staggerDirection: -1 } },
   };
 
   const mobileLinkVariants = {
-      open: { y: 0, opacity: 1, transition: { y: { stiffness: 1000, velocity: -100 } } },
-      closed: { y: 50, opacity: 0, transition: { y: { stiffness: 1000 } } }
-  };  return (
+    open: {
+      y: 0,
+      opacity: 1,
+      transition: { y: { stiffness: 1000, velocity: -100 } },
+    },
+    closed: { y: 50, opacity: 0, transition: { y: { stiffness: 1000 } } },
+  };
+  return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${        scrolled || isOpen 
-          ? "bg-white/10 border-b border-white/20 shadow-2xl shadow-orange-500/10" 
-          : "bg-white/5"
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        scrolled || isOpen
+          ? "bg-white/90 border-b border-orange-200/30 shadow-lg shadow-orange-500/5"
+          : "bg-white/80"
       }`}
       style={{
-        backdropFilter: scrolled || isOpen ? 'blur(20px) saturate(180%)' : 'blur(8px)',
+        backdropFilter:
+          scrolled || isOpen ? "blur(20px) saturate(180%)" : "blur(12px)",
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
-          <div className="flex items-center space-x-4">            
+          <div className="flex items-center space-x-4">
             {/* Logo with Modern Orange Gradient */}
-            <a href="#home" className="text-2xl font-bold" onClick={() => setActiveSection("home")} aria-label="Home">
-              <span className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 bg-clip-text text-transparent font-bold" data-text="Zavier">
+            <a
+              href="#home"
+              className="text-2xl font-bold"
+              onClick={() => setActiveSection("home")}
+              aria-label="Home"
+            >
+              <span
+                className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 bg-clip-text text-transparent font-bold"
+                data-text="Zavier"
+              >
                 Zavier
               </span>
             </a>
@@ -110,19 +110,21 @@ export default function Navbar() {
               <a
                 key={item.href}
                 href={item.href}
-                onMouseEnter={playHoverSound}
-                onClick={() => setActiveSection(item.id)}                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${
-                   activeSection === item.id ? "text-orange-600" : "text-gray-700 hover:text-orange-500"
+                onClick={() => setActiveSection(item.id)}
+                className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg hover:scale-105 ${
+                  activeSection === item.id
+                    ? "text-orange-600"
+                    : "text-gray-700 hover:text-orange-500"
                 }`}
                 aria-current={activeSection === item.id ? "page" : undefined}
               >
-                {item.label}                {/* --- UPDATED: Active Indicator with Glassmorphism --- */}
+                <span className="relative z-10">{item.label}</span>
+                {/* Active Indicator with improved styling */}
                 {activeSection === item.id && (
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-orange-500/30 to-orange-400/30 backdrop-blur-sm border border-orange-500/40 rounded-lg shadow-lg"
+                    className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-orange-400/20 backdrop-blur-sm border border-orange-500/30 rounded-lg shadow-md"
                     layoutId="active-box"
-                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    style={{ backdropFilter: 'blur(8px) saturate(120%)' }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
               </a>
@@ -131,39 +133,57 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <motion.nav initial={false} animate={isOpen ? "open" : "closed"}>                 <motion.button 
-                    className="relative z-50 text-gray-700 p-2"
-                    onClick={() => setIsOpen(!isOpen)} 
-                    aria-label={isOpen ? "Close menu" : "Open menu"}
-                    aria-expanded={isOpen}
-                 >
-                    {isOpen ? <X size={24} /> : <Menu size={24} />}
-                </motion.button>
-              <motion.div 
-                className="absolute top-0 right-0 bottom-0 w-full bg-gradient-to-br from-white/20 via-orange-50/30 to-orange-100/40 backdrop-blur-2xl border-l border-white/30 shadow-2xl" 
-                variants={mobileMenuVariants} 
-                style={{
-                  height: '100vh',
-                  backdropFilter: 'blur(20px) saturate(180%)',
-                }} 
-              />
-              <motion.div
-                  className="absolute top-24 left-0 w-full"
-                  variants={mobileLinkContainerVariants}
-                  aria-hidden={!isOpen}
+            <motion.nav initial={false} animate={isOpen ? "open" : "closed"}>
+              <motion.button
+                className="relative z-50 text-gray-700 p-2 hover:text-orange-500 transition-colors duration-200"
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label={isOpen ? "Close menu" : "Open menu"}
+                aria-expanded={isOpen}
               >
-                  {navItems.map((item) => (
-                      <motion.div key={item.href} variants={mobileLinkVariants} className="px-8 py-2">                          <a
-                              href={item.href}
-                              className={`block text-2xl text-center font-medium transition-colors ${
-                                  activeSection === item.id ? "text-orange-600" : "text-gray-700"
-                              }`}
-                              onClick={() => setIsOpen(false)}
-                          >
-                              {item.label}
-                          </a>
-                      </motion.div>
-                  ))}
+                <motion.div
+                  animate={isOpen ? { rotate: 180 } : { rotate: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isOpen ? <X size={24} /> : <Menu size={24} />}
+                </motion.div>
+              </motion.button>
+
+              <motion.div
+                className="absolute top-0 right-0 bottom-0 w-full bg-gradient-to-br from-white/95 via-orange-50/90 to-orange-100/85 backdrop-blur-xl border-l border-orange-200/50 shadow-2xl"
+                variants={mobileMenuVariants}
+                style={{
+                  height: "100vh",
+                  backdropFilter: "blur(20px) saturate(180%)",
+                }}
+              />
+
+              <motion.div
+                className="absolute top-20 left-0 w-full"
+                variants={mobileLinkContainerVariants}
+                aria-hidden={!isOpen}
+              >
+                {navItems.map((item) => (
+                  <motion.div
+                    key={item.href}
+                    variants={mobileLinkVariants}
+                    className="px-8 py-3"
+                  >
+                    <a
+                      href={item.href}
+                      className={`block text-xl text-center font-medium transition-all duration-200 py-2 px-4 rounded-lg ${
+                        activeSection === item.id
+                          ? "text-orange-600 bg-orange-100/50"
+                          : "text-gray-700 hover:text-orange-500 hover:bg-orange-50/30"
+                      }`}
+                      onClick={() => {
+                        setActiveSection(item.id);
+                        setIsOpen(false);
+                      }}
+                    >
+                      {item.label}
+                    </a>
+                  </motion.div>
+                ))}
               </motion.div>
             </motion.nav>
           </div>

@@ -45,10 +45,7 @@ const DataPod = ({ title, children, delay = 0 }: { title: string, children: Reac
       variants={variants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
-      className="relative bg-white/60 border border-orange-200/50 rounded-2xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:border-orange-300/80"
-    >
-      <div className="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-orange-400/70 rounded-tl-lg"></div>
-      <div className="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-orange-400/70 rounded-br-lg"></div>
+      className="relative bg-white/60 border border-orange-200/50 rounded-2xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:border-orange-300/80">
       <h3 className="text-xl font-bold text-orange-700 mb-4">{title}</h3>
       <div className="text-gray-700 leading-relaxed space-y-3">{children}</div>
     </motion.div>

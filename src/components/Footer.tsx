@@ -63,9 +63,6 @@ export default function Footer() {
                     <p className="font-semibold text-sm">
                         &copy; {currentYear} Muhammad Fadel. All Rights Reserved.
                     </p>
-                    <p className="text-xs text-gray-500">
-                        Crafted with passion in Cikarang, Indonesia.
-                    </p>
                 </div>
 
                 {/* --- Right Side: Social Links --- */}

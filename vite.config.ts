@@ -9,7 +9,4 @@ export default defineConfig({
     tailwindcss(),
   ],
   base: "/Portofolio/",
-  build: {
-    chunkSizeWarningLimit: 1000, // Increase the limit to 1000 kB
-  },
 })
