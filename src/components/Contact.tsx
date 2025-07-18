@@ -17,14 +17,14 @@ import { useInView } from "react-intersection-observer";
 
 // --- Reusable Grid Pattern (from other sections) ---
 const GridPattern = () => (
-  <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] opacity-10 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
+  <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#d1d5db_1px,transparent_1px),linear-gradient(to_bottom,#d1d5db_1px,transparent_1px)] bg-[size:6rem_4rem] opacity-15 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
 );
 
 // --- Reusable Animated Title (from other sections) ---
 const AnimatedTitle = ({ text }: { text: string }) => {
   return (
     <h2 className="text-4xl md:text-5xl font-bold mb-4">
-      <span className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+      <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">
         {text}
       </span>
     </h2>
@@ -101,7 +101,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="py-20 md:py-32 relative overflow-hidden bg-orange-50"
+      className="py-20 md:py-32 relative overflow-hidden bg-white"
     >
       <GridPattern />
 
@@ -114,7 +114,7 @@ export default function Contact() {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <AnimatedTitle text="Get In Touch" />
-          <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-amber-400 mx-auto rounded-full mb-6"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-blue-800 to-blue-600 mx-auto rounded-full mb-6"></div>
           <p className="text-gray-700 max-w-2xl mx-auto text-base md:text-lg">
             Have a project, a question, or just want to connect? Send me a
             message.
@@ -126,12 +126,12 @@ export default function Contact() {
           variants={cardVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="grid lg:grid-cols-2 gap-8 bg-white/70 backdrop-blur-md border border-orange-200/50 rounded-2xl p-6 sm:p-8 shadow-lg"
-        >
+          className="relative grid lg:grid-cols-2 gap-8 backdrop-blur-sm bg-white border border-blue-200/50 rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-xl hover:shadow-blue-800/10 transition-all duration-300">
+          <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-blue-600/70 rounded-br-lg"></div>
           {/* --- LEFT SIDE: Info & Icon --- */}
           <div className="flex flex-col justify-between">
             <div>
-              <h3 className="text-2xl font-bold mb-6 text-gray-800">
+              <h3 className="text-2xl font-bold mb-6 text-blue-800">
                 Contact Information
               </h3>
               <motion.div className="space-y-4" variants={cardVariants}>
@@ -154,8 +154,8 @@ export default function Contact() {
                     onClick={() => handleCopy(value, label)}
                     variants={itemVariants}
                   >
-                    <div className="p-3 rounded-full bg-orange-100 border border-orange-200/80 group-hover:bg-orange-200 group-hover:scale-110 transition-all duration-300">
-                      <Icon className="w-5 h-5 text-orange-600" />
+                    <div className="p-3 rounded-full backdrop-blur-sm bg-white border border-blue-300/40 hover:bg-blue-50/70 hover:border-blue-300/60 group-hover:scale-110 transition-all duration-300 shadow-lg">
+                      <Icon className="w-5 h-5 text-gray-700 group-hover:text-blue-600 transition-colors" />
                     </div>
                     <div>
                       <div className="text-xs text-gray-500 uppercase tracking-wider">
@@ -172,8 +172,8 @@ export default function Contact() {
           </div>
 
           {/* --- RIGHT SIDE: Contact Form --- */}
-          <div className="border-t-2 lg:border-t-0 lg:border-l-2 border-orange-200/50 pt-8 lg:pt-0 lg:pl-8">
-            <h3 className="text-2xl font-bold mb-6 text-gray-800">
+          <div className="border-t-2 lg:border-t-0 lg:border-l-2 border-blue-200/50 pt-8 lg:pt-0 lg:pl-8">
+            <h3 className="text-2xl font-bold mb-6 text-blue-800">
               Send a Message
             </h3>
             <form onSubmit={handleSubmit} className="flex flex-col space-y-6">
@@ -193,7 +193,7 @@ export default function Contact() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                    className="w-full px-4 py-3 border border-blue-200/50 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors backdrop-blur-sm bg-white/80"
                     placeholder="Your full name"
                   />
                 </div>
@@ -211,7 +211,7 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                    className="w-full px-4 py-3 border border-blue-200/50 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors backdrop-blur-sm bg-white/80"
                     placeholder="your.email@example.com"
                   />
                 </div>
@@ -232,7 +232,7 @@ export default function Contact() {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                  className="w-full px-4 py-3 border border-blue-200/50 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors backdrop-blur-sm bg-white/80"
                   placeholder="What's this about?"
                 />
               </div>
@@ -252,7 +252,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                   rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-vertical"
+                  className="w-full px-4 py-3 border border-blue-200/50 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors resize-vertical backdrop-blur-sm bg-white/80"
                   placeholder="Tell me about your project, ideas, or just say hello..."
                 />
               </div>
@@ -264,7 +264,7 @@ export default function Contact() {
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.99 }}
                   transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                  className="w-full flex items-center justify-center gap-x-2 px-8 py-4 font-semibold text-white bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-orange-500/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:ring-offset-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full flex items-center justify-center gap-x-2 px-8 py-4 font-semibold text-white bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-800/25 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 focus:ring-offset-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>

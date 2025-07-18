@@ -16,7 +16,7 @@ const GridPattern = () => (
 const AnimatedTitle = ({ text }: { text: string }) => {
   return (
     <h2 className="text-4xl md:text-5xl font-bold mb-4">
-      <span className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+      <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">
         {text}
       </span>
     </h2>
@@ -42,9 +42,14 @@ const FeaturedProjectCard = ({ project }: { project: any }) => {
       variants={cardVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
-      className="group relative rounded-2xl p-px bg-gradient-to-br from-orange-300/50 to-amber-300/50 hover:from-orange-400 hover:to-amber-400 transition-all duration-300 shadow-md hover:shadow-xl"
+      className="group relative rounded-3xl backdrop-blur-sm bg-white border border-blue-200/50 shadow-lg hover:shadow-xl hover:shadow-blue-800/10 transition-all duration-300"
     >
-      <div className="relative rounded-[15px] bg-orange-50/90 backdrop-blur-sm overflow-hidden flex flex-col lg:flex-row">
+      {/* Decorative Corner Brackets (matching Hero style) */}
+      <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-blue-600/70 rounded-tl-lg"></div>
+      <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-blue-600/70 rounded-br-lg"></div>
+      {/* Floating accent elements */}
+      <div className="absolute bottom-6 left-6 w-1 h-1 bg-blue-600 rounded-full animate-ping"></div>
+      <div className="relative rounded-3xl overflow-hidden flex flex-col lg:flex-row">
         <div className="relative lg:w-3/5">
           <img
             src={project.image}
@@ -57,7 +62,7 @@ const FeaturedProjectCard = ({ project }: { project: any }) => {
           />
         </div>
         <div className="p-8 lg:w-2/5 flex flex-col">
-          <h3 className="text-2xl font-bold text-gray-800 mb-2">
+          <h3 className="text-2xl font-bold text-blue-800 mb-2">
             {project.title}
           </h3>
           <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-grow">
@@ -67,18 +72,18 @@ const FeaturedProjectCard = ({ project }: { project: any }) => {
             {project.tech.map((tech: string) => (
               <span
                 key={tech}
-                className="px-2 py-1 bg-orange-500/10 text-orange-700 rounded-md text-xs border border-orange-500/20"
+                className="px-2 py-1 bg-blue-500/10 text-blue-700 rounded-md text-xs border border-blue-500/20"
               >
                 {tech}
               </span>
             ))}
           </div>
-          <div className="flex space-x-4 mt-auto pt-4 border-t border-orange-200/50">
+          <div className="flex space-x-4 mt-auto pt-4 border-t border-blue-200/50">
             <a
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-gray-600 hover:text-orange-600 transition-colors duration-300"
+              className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors duration-300"
             >
               <Github size={18} />
               <span>Code</span>
@@ -87,7 +92,7 @@ const FeaturedProjectCard = ({ project }: { project: any }) => {
               href={project.live}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-gray-600 hover:text-orange-600 transition-colors duration-300"
+              className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors duration-300"
             >
               <ExternalLink size={18} />
               <span>Live Demo</span>
@@ -145,16 +150,13 @@ export default function Projects() {
   const [selectedProjectIndex, setSelectedProjectIndex] = useState(0);
 
   return (
-    <section
-      id="projects"
-      className="py-20 relative overflow-hidden bg-orange-50"
-    >
+    <section id="projects" className="py-20 relative overflow-hidden bg-white">
       <GridPattern />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
           <AnimatedTitle text="Projects" />
-          <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-amber-400 mx-auto rounded-full mb-6"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-blue-800 to-blue-600 mx-auto rounded-full mb-6"></div>
           <p className="text-gray-700 max-w-2xl mx-auto">
             A selection of my projects. Each represents a unique challenge and a
             story of development.
@@ -164,7 +166,7 @@ export default function Projects() {
         <div className="space-y-16">
           {/* Featured Project Section */}
           <div>
-            <h3 className="text-2xl font-mono text-orange-600 mb-4 pl-4 border-l-4 border-orange-500">
+            <h3 className="text-2xl font-mono text-blue-700 mb-4 pl-4 border-l-4 border-blue-600">
               [ Featured Project ]
             </h3>
             <FeaturedProjectCard project={featuredProject} />
@@ -173,26 +175,26 @@ export default function Projects() {
           {/* Archived Files Section (Tabbed Interface) */}
           {otherProjects.length > 0 && (
             <div>
-              <h3 className="text-2xl font-mono text-orange-600 mb-4 pl-4 border-l-4 border-orange-500">
+              <h3 className="text-2xl font-mono text-blue-700 mb-4 pl-4 border-l-4 border-blue-600">
                 [ Other Projects ]
               </h3>
-              <div className="flex flex-col md:flex-row gap-8 rounded-2xl p-4 bg-white/60 backdrop-blur-sm border border-orange-200/50 shadow-md">
+              <div className="relative flex flex-col md:flex-row gap-8 rounded-3xl p-4 backdrop-blur-sm bg-white border border-blue-200/50 shadow-lg hover:shadow-xl hover:shadow-blue-800/10 transition-all duration-300">
                 {/* File Tabs */}
-                <div className="flex md:flex-col overflow-x-auto md:overflow-x-visible md:w-1/4 pb-2 md:pb-0 border-b-2 md:border-b-0 md:border-r-2 border-orange-200/50">
+                <div className="flex md:flex-col overflow-x-auto md:overflow-x-visible md:w-1/4 pb-2 md:pb-0 border-b-2 md:border-b-0 md:border-r-2 border-blue-200/50">
                   {otherProjects.map((project, index) => (
                     <button
                       key={project.title}
                       onClick={() => setSelectedProjectIndex(index)}
                       className={`relative text-left w-full px-4 py-3 text-sm font-medium transition-colors duration-200 rounded-md whitespace-nowrap ${
                         selectedProjectIndex === index
-                          ? "text-orange-700"
-                          : "text-gray-500 hover:bg-orange-100/50 hover:text-orange-600"
+                          ? "text-blue-700"
+                          : "text-gray-500 hover:bg-blue-100/50 hover:text-blue-600"
                       }`}
                     >
                       {selectedProjectIndex === index && (
                         <motion.div
                           layoutId="active-tab-highlight"
-                          className="absolute inset-0 bg-gradient-to-r from-orange-200/80 to-amber-200/80 rounded-md"
+                          className="absolute inset-0 bg-gradient-to-r from-blue-200/80 to-blue-300/80 rounded-md"
                         />
                       )}
                       <span className="relative z-10">{project.title}</span>
@@ -215,7 +217,7 @@ export default function Projects() {
                         <img
                           src={otherProjects[selectedProjectIndex].image}
                           alt={otherProjects[selectedProjectIndex].title}
-                          className="w-full h-full object-cover rounded-lg border border-orange-200/50 shadow-sm"
+                          className="w-full h-full object-cover rounded-lg border border-blue-200/50 shadow-sm"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src =
                               "https://placehold.co/600x400/ffedd5/f97316?text=IMAGE+N/A";
@@ -231,19 +233,19 @@ export default function Projects() {
                             (tech: string) => (
                               <span
                                 key={tech}
-                                className="px-2 py-1 bg-orange-500/10 text-orange-700 rounded-md text-xs border border-orange-500/20"
+                                className="px-2 py-1 bg-blue-500/10 text-blue-700 rounded-md text-xs border border-blue-500/20"
                               >
                                 {tech}
                               </span>
                             )
                           )}
                         </div>
-                        <div className="flex space-x-4 mt-auto pt-4 border-t border-orange-200/50">
+                        <div className="flex space-x-4 mt-auto pt-4 border-t border-blue-200/50">
                           <a
                             href={otherProjects[selectedProjectIndex].github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center space-x-2 text-gray-600 hover:text-orange-600 transition-colors"
+                            className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
                           >
                             <Github size={18} />
                             <span>Code</span>
@@ -252,7 +254,7 @@ export default function Projects() {
                             href={otherProjects[selectedProjectIndex].live}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center space-x-2 text-gray-600 hover:text-orange-600 transition-colors"
+                            className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
                           >
                             <ExternalLink size={18} />
                             <span>Live Demo</span>

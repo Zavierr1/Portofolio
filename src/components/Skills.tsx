@@ -9,16 +9,11 @@ import * as THREE from "three"
 import { Vector3 } from "three"
 import { random } from "maath"
 
-// --- Grid Pattern Component (matching About.tsx) ---
-const GridPattern = () => (
-  <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] opacity-10 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
-);
-
 // --- Animated Title (matching About.tsx) ---
 const AnimatedTitle = ({ text }: { text: string }) => {
     return (
         <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">
                 {text}
             </span>
         </h2>
@@ -52,10 +47,10 @@ function SkillGlyph({ level, isHovered }: { level: string; isHovered: boolean })
 
   const { geometry, color } = (() => {
     switch (level.toLowerCase()) {
-      case "expert": return { geometry: <icosahedronGeometry args={[1, 0]} />, color: "#ea580c" }
-      case "advanced": return { geometry: <dodecahedronGeometry args={[0.9, 0]} />, color: "#f97316" }
-      case "proficient": return { geometry: <octahedronGeometry args={[1, 0]} />, color: "#fb923c" }
-      default: return { geometry: <boxGeometry args={[1.2, 1.2, 1.2]} />, color: "#fdba74" }
+      case "expert": return { geometry: <icosahedronGeometry args={[1, 0]} />, color: "#1e40af" }
+      case "advanced": return { geometry: <dodecahedronGeometry args={[0.9, 0]} />, color: "#2563eb" }
+      case "proficient": return { geometry: <octahedronGeometry args={[1, 0]} />, color: "#3b82f6" }
+      default: return { geometry: <boxGeometry args={[1.2, 1.2, 1.2]} />, color: "#60a5fa" }
     }
   })()
 
@@ -66,7 +61,7 @@ function SkillGlyph({ level, isHovered }: { level: string; isHovered: boolean })
         <meshStandardMaterial ref={materialRef} wireframe color={color} emissive={color} emissiveIntensity={0.4} />
       </mesh>
       <Points ref={particlesRef} positions={sphere} stride={3} frustumCulled={false}>
-        <PointMaterial transparent color="#f97316" size={0.008} sizeAttenuation={true} depthWrite={false} />
+        <PointMaterial transparent color="#2563eb" size={0.008} sizeAttenuation={true} depthWrite={false} />
       </Points>
     </group>
   )
@@ -76,29 +71,30 @@ function SkillCard({ skill }: { skill: { name: string; level: string; descriptio
   const [isHovered, setIsHovered] = useState(false)
   return (
     <div
-      className="group relative rounded-2xl border border-orange-300/50 shadow-sm transition-all duration-300 hover:shadow-xl hover:border-orange-400/90 bg-white/80 backdrop-blur-sm flex-shrink-0 w-72"
+      className="group relative rounded-2xl border border-blue-200/50 shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-blue-800/10 hover:border-blue-300/60 backdrop-blur-sm bg-white flex-shrink-0 w-72"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="absolute -inset-px bg-gradient-to-r from-orange-500 to-amber-400 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"></div>
+
+      <div className="absolute -inset-px bg-gradient-to-r from-blue-800 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"></div>
       <div className="relative rounded-2xl flex flex-col h-full overflow-hidden">
-        <div className="relative h-48 flex-shrink-0 border-b-2 border-orange-200/80">
-          <div className="absolute inset-0 bg-gradient-to-b from-orange-50/80 to-transparent"></div>
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-orange-500/80 animate-pulse group-hover:bg-orange-400"></div>
-          <div className="absolute top-2 left-3 text-orange-600 font-mono text-[10px] opacity-70 group-hover:opacity-100 transition-opacity">
+        <div className="relative h-48 flex-shrink-0 border-b-2 border-blue-200/50">
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-50/80 to-transparent"></div>
+          <div className="absolute top-0 left-0 w-full h-0.5 bg-blue-600/80 animate-pulse group-hover:bg-blue-700"></div>
+          <div className="absolute top-2 left-3 text-blue-700 font-mono text-[10px] opacity-70 group-hover:opacity-100 transition-opacity">
             <p>CLASS: {skill.class}</p><p>ID: {skill.id}</p>
           </div>
-          <div className="absolute top-2 right-3 text-right text-orange-600 font-mono text-[10px] opacity-70 group-hover:opacity-100 transition-opacity">
-            <p>STABILITY</p><p className="text-lg text-orange-500">{skill.stability}%</p>
+          <div className="absolute top-2 right-3 text-right text-blue-700 font-mono text-[10px] opacity-70 group-hover:opacity-100 transition-opacity">
+            <p>STABILITY</p><p className="text-lg text-blue-600">{skill.stability}%</p>
           </div>
           <Canvas camera={{ position: [0, 0, 3.5], fov: 50 }}>
-            <ambientLight intensity={0.5} /><pointLight position={[0, 0, 5]} intensity={100} color="#f97316" />
+            <ambientLight intensity={0.5} /><pointLight position={[0, 0, 5]} intensity={100} color="#2563eb" />
             <Suspense fallback={null}><SkillGlyph level={skill.level} isHovered={isHovered} /></Suspense>
           </Canvas>
         </div>
-        <div className="p-5 flex-grow bg-white/20" style={{ backgroundImage: "radial-gradient(rgba(249, 115, 22, 0.03) 1px, transparent 1px)", backgroundSize: "0.5rem 0.5rem" }}>
-          <h3 className="text-xl font-bold text-gray-800 mb-1">{skill.name}</h3>
-          <p className="text-sm text-orange-600 font-semibold mb-3">{skill.level}</p>
+        <div className="p-5 flex-grow bg-white/20" style={{ backgroundImage: "radial-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px)", backgroundSize: "0.5rem 0.5rem" }}>
+          <h3 className="text-xl font-bold text-blue-800 mb-1">{skill.name}</h3>
+          <p className="text-sm text-blue-700 font-semibold mb-3">{skill.level}</p>
           <p className="text-gray-600 text-xs leading-relaxed">{skill.description}</p>
         </div>
       </div>
@@ -115,7 +111,7 @@ const SkillCarousel = ({ category, skills }: {
 
   return (
     <div className="mb-12">
-      <h3 className="text-2xl font-mono text-orange-600 mb-4 pl-4 border-l-4 border-orange-500">{category}</h3>
+      <h3 className="text-2xl font-mono text-blue-700 mb-4 pl-4 border-l-4 border-blue-600">{category}</h3>
       <div className="relative">
         <motion.div ref={scrollRef} className="flex space-x-8 overflow-x-auto pb-4 horizontal-scrollbar" whileTap={{ cursor: "grabbing" }}>
           {skills.map((skill, index) => (
@@ -133,13 +129,12 @@ export default function Skills() {
   // --- Data now organized by category ---
   const skillsData = {
     gameDev: [
-      { name: "Unreal Engine", level: "Expert", description: "Crafting high-fidelity cinematic experiences and complex gameplay.", class: "Tier-IV", id: "#UE5-EXP", stability: "99.8"},
       { name: "Unity", level: "Advanced", description: "Architecting core game mechanics, systems, and 3D environments.", class: "Tier-III", id: "#U3D-ADV", stability: "98.2"},
       { name: "C#", level: "Advanced", description: "Primary language for creating robust logic and complex interactions.", class: "Tier-III", id: "#CS-ADV", stability: "99.1"},
     ],
     webAndGraphics: [
       { name: "React", level: "Proficient", description: "Building dynamic, responsive user interfaces for web applications.", class: "Tier-II", id: "#RJS-PRO", stability: "97.5"},
-      { name: "Three.js / R3F", level: "Proficient", description: "Integrating interactive 3D graphics directly into the web.", class: "Tier-II", id: "#TJS-PRO", stability: "96.4"},
+      { name: "Three.js", level: "Proficient", description: "Integrating interactive 3D graphics directly into the web.", class: "Tier-II", id: "#TJS-PRO", stability: "96.4"},
       { name: "Node.js", level: "Basic", description: "Developing server-side logic and APIs for web and game backends.", class: "Tier-I", id: "#NJS-BAS", stability: "95.2"},
     ],
     toolsAndLanguages: [
@@ -149,13 +144,11 @@ export default function Skills() {
     ]
   }
   return (
-    <section id="skills" className="py-20 relative overflow-hidden bg-orange-50">
-      {/* Grid Pattern Background (matching About.tsx) */}
-      <GridPattern />
+    <section id="skills" className="py-20 relative overflow-hidden bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
           <AnimatedTitle text="Skills" />
-          <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-amber-400 mx-auto rounded-full mb-6"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-blue-800 to-blue-600 mx-auto rounded-full mb-6"></div>
           <p className="text-gray-700 max-w-2xl mx-auto">
             A curated collection of my core competencies. Drag to explore each category.
           </p>

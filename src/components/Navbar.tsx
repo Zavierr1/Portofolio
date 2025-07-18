@@ -75,7 +75,7 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled || isOpen
-          ? "bg-white/90 border-b border-orange-200/30 shadow-lg shadow-orange-500/5"
+          ? "bg-white/90 border-b border-gray-200/30 shadow-lg shadow-blue-800/5"
           : "bg-white/80"
       }`}
       style={{
@@ -94,7 +94,7 @@ export default function Navbar() {
               aria-label="Home"
             >
               <span
-                className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 bg-clip-text text-transparent font-bold"
+                className="bg-gradient-to-r from-blue-800 via-blue-700 to-blue-600 bg-clip-text text-transparent font-bold"
                 data-text="Zavier"
               >
                 Zavier
@@ -113,8 +113,8 @@ export default function Navbar() {
                 onClick={() => setActiveSection(item.id)}
                 className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg hover:scale-105 ${
                   activeSection === item.id
-                    ? "text-orange-600"
-                    : "text-gray-700 hover:text-orange-500"
+                    ? "text-blue-700"
+                    : "text-gray-700 hover:text-blue-600"
                 }`}
                 aria-current={activeSection === item.id ? "page" : undefined}
               >
@@ -122,7 +122,7 @@ export default function Navbar() {
                 {/* Active Indicator with improved styling */}
                 {activeSection === item.id && (
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-orange-400/20 backdrop-blur-sm border border-orange-500/30 rounded-lg shadow-md"
+                    className="absolute inset-0 bg-gradient-to-r from-blue-700/20 to-blue-600/20 backdrop-blur-sm border border-blue-700/30 rounded-lg shadow-md"
                     layoutId="active-box"
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
@@ -135,7 +135,7 @@ export default function Navbar() {
           <div className="md:hidden">
             <motion.nav initial={false} animate={isOpen ? "open" : "closed"}>
               <motion.button
-                className="relative z-50 text-gray-700 p-2 hover:text-orange-500 transition-colors duration-200"
+                className="relative z-50 text-gray-700 p-2 hover:text-blue-600 transition-colors duration-200"
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label={isOpen ? "Close menu" : "Open menu"}
                 aria-expanded={isOpen}
@@ -149,7 +149,7 @@ export default function Navbar() {
               </motion.button>
 
               <motion.div
-                className="absolute top-0 right-0 bottom-0 w-full bg-gradient-to-br from-white/95 via-orange-50/90 to-orange-100/85 backdrop-blur-xl border-l border-orange-200/50 shadow-2xl"
+                className="absolute top-0 right-0 bottom-0 w-full bg-gradient-to-br from-white/95 via-gray-50/90 to-gray-100/85 backdrop-blur-xl border-l border-gray-200/50 shadow-2xl"
                 variants={mobileMenuVariants}
                 style={{
                   height: "100vh",
@@ -172,8 +172,8 @@ export default function Navbar() {
                       href={item.href}
                       className={`block text-xl text-center font-medium transition-all duration-200 py-2 px-4 rounded-lg ${
                         activeSection === item.id
-                          ? "text-orange-600 bg-orange-100/50"
-                          : "text-gray-700 hover:text-orange-500 hover:bg-orange-50/30"
+                          ? "text-blue-700 bg-blue-100/50"
+                          : "text-gray-700 hover:text-blue-600 hover:bg-gray-50/30"
                       }`}
                       onClick={() => {
                         setActiveSection(item.id);
