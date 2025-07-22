@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, type Variants } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
@@ -17,13 +17,50 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<SectionId>("home");
 
-  const navItems: NavItem[] = [
+  const navItems: NavItem[] = useMemo(() => [
     { href: "#home", label: "Home", id: "home" },
     { href: "#about", label: "About", id: "about" },
     { href: "#skills", label: "Skills", id: "skills" },
     { href: "#projects", label: "Projects", id: "projects" },
     { href: "#contact", label: "Contact", id: "contact" },
-  ];
+  ], []);
+
+  // Custom smooth scroll function with enhanced easing
+  const smoothScrollTo = (targetId: string, sectionId: SectionId) => {
+    const targetElement = document.querySelector(targetId) as HTMLElement;
+    if (!targetElement) return;
+
+    const startPosition = window.scrollY;
+    const targetPosition = targetElement.offsetTop - 80; // Account for navbar height
+    const distance = targetPosition - startPosition;
+    const duration = Math.min(Math.abs(distance) / 2, 1200); // Dynamic duration, max 1.2s
+
+    let startTime: number | null = null;
+
+    // Enhanced easing function for smoother movement
+    const easeInOutCubic = (t: number): number => {
+      return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+    };
+
+    const animation = (currentTime: number) => {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / duration, 1);
+
+      const easedProgress = easeInOutCubic(progress);
+      const currentPosition = startPosition + (distance * easedProgress);
+
+      window.scrollTo(0, currentPosition);
+
+      if (progress < 1) {
+        requestAnimationFrame(animation);
+      } else {
+        setActiveSection(sectionId);
+      }
+    };
+
+    requestAnimationFrame(animation);
+  };
 
   // Effect for scroll handling to determine active section and navbar background
   useEffect(() => {
@@ -45,7 +82,7 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []); // navItems is stable
+  }, [navItems]); // navItems is stable
 
   const mobileMenuVariants: Variants = {
     open: {
@@ -76,18 +113,19 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto">
         {/* Glassmorphism Card Container */}
         <div
-          className={`relative backdrop-blur-sm bg-white border border-blue-200/50 rounded-3xl shadow-lg hover:shadow-xl hover:shadow-blue-800/10 transition-all duration-300 ${
-            scrolled || isOpen ? "shadow-xl shadow-blue-800/10" : ""
-          }`}
+          className={`relative backdrop-blur-sm bg-white border border-blue-200/50 rounded-3xl shadow-lg hover:shadow-xl hover:shadow-blue-800/10 transition-all duration-300 ${scrolled || isOpen ? "shadow-xl shadow-blue-800/10" : ""
+            }`}
         >
-          
+
           <div className="flex justify-between items-center py-4 px-6 md:px-8">
             <div className="flex items-center space-x-4">
-              {/* Logo with Modern Orange Gradient */}
-              <a
-                href="#home"
+              {/* Logo with Modern Blue Gradient */}
+              <button
                 className="text-2xl font-bold"
-                onClick={() => setActiveSection("home")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  smoothScrollTo("#home", "home");
+                }}
                 aria-label="Home"
               >
                 <span
@@ -96,7 +134,7 @@ export default function Navbar() {
                 >
                   Zavier
                 </span>
-              </a>
+              </button>
               {/* System Status Indicator */}
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             </div>
@@ -104,15 +142,16 @@ export default function Navbar() {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-1">
               {navItems.map((item) => (
-                <a
+                <button
                   key={item.href}
-                  href={item.href}
-                  onClick={() => setActiveSection(item.id)}
-                  className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg hover:scale-105 ${
-                    activeSection === item.id
-                      ? "text-blue-700"
-                      : "text-gray-700 hover:text-blue-600"
-                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    smoothScrollTo(item.href, item.id);
+                  }}
+                  className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg hover:scale-105 ${activeSection === item.id
+                    ? "text-blue-700"
+                    : "text-gray-700 hover:text-blue-600"
+                    }`}
                   aria-current={activeSection === item.id ? "page" : undefined}
                 >
                   <span className="relative z-10">{item.label}</span>
@@ -128,7 +167,7 @@ export default function Navbar() {
                       }}
                     />
                   )}
-                </a>
+                </button>
               ))}
             </div>
 
@@ -169,20 +208,19 @@ export default function Navbar() {
                       variants={mobileLinkVariants}
                       className="px-8 py-3"
                     >
-                      <a
-                        href={item.href}
-                        className={`block text-xl text-center font-medium transition-all duration-200 py-2 px-4 rounded-lg ${
-                          activeSection === item.id
-                            ? "text-blue-700 bg-blue-100/50"
-                            : "text-gray-700 hover:text-blue-600 hover:bg-gray-50/30"
-                        }`}
-                        onClick={() => {
-                          setActiveSection(item.id);
+                      <button
+                        className={`block w-full text-xl text-center font-medium transition-all duration-200 py-2 px-4 rounded-lg ${activeSection === item.id
+                          ? "text-blue-700 bg-blue-100/50"
+                          : "text-gray-700 hover:text-blue-600 hover:bg-gray-50/30"
+                          }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          smoothScrollTo(item.href, item.id);
                           setIsOpen(false);
                         }}
                       >
                         {item.label}
-                      </a>
+                      </button>
                     </motion.div>
                   ))}
                 </motion.div>

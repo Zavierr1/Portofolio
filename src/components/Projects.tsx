@@ -10,6 +10,20 @@ import outbreakImage from "../assets/images/Outbreak.png"
 import fkImage from "../assets/images/freaky_hollow.png"
 import raturuImage from "../assets/images/raturu.png"
 
+// TypeScript interfaces
+interface Project {
+  title: string;
+  description: string;
+  tech: string[];
+  image: string;
+  live: string;
+  github?: string; // Optional since not all projects have GitHub links
+}
+
+interface FeaturedProjectCardProps {
+  project: Project;
+}
+
 // --- Reusable Grid Pattern (from other sections) ---
 const GridPattern = () => (
   <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] opacity-10 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
@@ -27,7 +41,7 @@ const AnimatedTitle = ({ text }: { text: string }) => {
 };
 
 // --- Project Card for the FEATURED project ---
-const FeaturedProjectCard = ({ project }: { project: any }) => {
+const FeaturedProjectCard = ({ project }: FeaturedProjectCardProps) => {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
 
   const cardVariants: Variants = {
@@ -183,11 +197,10 @@ export default function Projects() {
                     <button
                       key={project.title}
                       onClick={() => setSelectedProjectIndex(index)}
-                      className={`relative text-left w-full px-4 py-3 text-sm font-medium transition-colors duration-200 rounded-md whitespace-nowrap ${
-                        selectedProjectIndex === index
+                      className={`relative text-left w-full px-4 py-3 text-sm font-medium transition-colors duration-200 rounded-md whitespace-nowrap ${selectedProjectIndex === index
                           ? "text-blue-700"
                           : "text-gray-500 hover:bg-blue-100/50 hover:text-blue-600"
-                      }`}
+                        }`}
                     >
                       {selectedProjectIndex === index && (
                         <motion.div
@@ -239,15 +252,6 @@ export default function Projects() {
                           )}
                         </div>
                         <div className="flex space-x-4 mt-auto pt-4 border-t border-blue-200/50">
-                          <a
-                            href={otherProjects[selectedProjectIndex]}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
-                          >
-                            <Github size={18} />
-                            <span>Code</span>
-                          </a>
                           <a
                             href={otherProjects[selectedProjectIndex].live}
                             target="_blank"

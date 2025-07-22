@@ -96,12 +96,6 @@ export default function About() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium text-gray-600">
-                    Game Jams
-                  </span>
-                  <span className="font-bold text-blue-700">1</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">
                     Projects
                   </span>
                   <span className="font-bold text-blue-700">4</span>
