@@ -79,88 +79,74 @@ export default function About() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* --- Pod 1: Bio --- */}
           <div className="lg:col-span-2">
-            <DataPod title="[ My Story ]">
+            <DataPod title="[ Player Profile ]">
               <p>
-                A Game Developer with a relentless passion for building
-                interactive worlds. In just four months, I have moved from
-                concept to creation, developing a range of games and proving my
-                mettle in a high-pressure Game Jam.
-              </p>
-              <p>
-                My goal is to craft applications that not only function
-                flawlessly but provide exceptional, memorable user experiences.
+                As a game developer, I focus on building engaging gameplay
+                mechanics and immersive virtual worlds. I believe the best games
+                come from a love for both the art and the science of creation.
+                I'm constantly learning and enjoy turning complex ideas into
+                fun, polished experiences.
               </p>
             </DataPod>
           </div>
 
-          {/* --- Pod 2: Core Philosophy --- */}
-          <DataPod title="[ Core Philosophy ]" delay={0.2}>
-            <p>
-              I believe that clean, maintainable code is the bedrock of any
-              great project. My approach is rooted in user-centric design,
-              ensuring every line of code serves a purpose in enhancing the
-              final experience.
-            </p>
-          </DataPod>
+          {/* --- Pod 2: Quick Stats --- */}
+          <div className="lg:col-span-1">
+            <DataPod title="[ Stats ]" delay={0.2}>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Game Jams
+                  </span>
+                  <span className="font-bold text-blue-700">1</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Projects
+                  </span>
+                  <span className="font-bold text-blue-700">4</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Tech
+                  </span>
+                  <span className="font-bold text-blue-700">10+</span>
+                </div>
+              </div>
+            </DataPod>
+          </div>
 
-          {/* --- Pod 3: Experience Log (Timeline) --- */}
+          {/* --- Pod 3: Current Focus --- */}
           <div className="lg:col-span-3">
-            <DataPod title="[ My Journey ]" delay={0.4}>
-              <div className="relative border-l-2 border-blue-600/70 pl-8 space-y-8">
-                {/* Timeline Item 1 */}
-                <div className="relative">
-                  <div className="absolute -left-[42px] top-1 w-4 h-4 bg-blue-700 rounded-full border-4 border-gray-100 ring-4 ring-white shadow-sm"></div>
-                  <p className="font-mono text-sm text-blue-700 font-medium">
-                    Q1 2024
-                  </p>
-                  <h4 className="font-semibold text-blue-800">
-                    Game Developer Concentration
-                  </h4>
-                  <p className="text-sm text-gray-600">
-                    Embarked on an intensive learning path, focusing on the core
-                    principles of game development and software engineering.
-                  </p>
+            <DataPod title="[ Current Focus ]" delay={0.4}>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                  <div>
+                    <h4 className="font-semibold text-blue-800">
+                      Building Interactive Experiences
+                    </h4>
+                    <p className="text-sm text-gray-600">
+                      Crafting web apps and games
+                    </p>
+                  </div>
                 </div>
-                {/* Timeline Item 2 */}
-                <div className="relative">
-                  <div className="absolute -left-[42px] top-1 w-4 h-4 bg-blue-700 rounded-full border-4 border-gray-100 ring-4 ring-white shadow-sm"></div>
-                  <p className="font-mono text-sm text-blue-700 font-medium">
-                    Q2 2024
-                  </p>
-                  <h4 className="font-semibold text-blue-800">
-                    GIMJAM ITB (Game Jam)
-                  </h4>
-                  <p className="text-sm text-gray-600">
-                    Competed in a 48-hour Game Jam, successfully designing,
-                    developing, and deploying a complete game under a strict
-                    deadline.
-                  </p>
+
+                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <div>
+                    <h4 className="font-semibold text-blue-800">
+                      Learning & Experimenting
+                    </h4>
+                    <p className="text-sm text-gray-600">
+                      Always exploring new tech and creative solutions
+                    </p>
+                  </div>
                 </div>
-                <div className="relative">
-                  <div className="absolute -left-[42px] top-1 w-4 h-4 bg-blue-700 rounded-full border-4 border-gray-100 ring-4 ring-white shadow-sm"></div>
-                  <p className="font-mono text-sm text-blue-700 font-medium">
-                    Q3 2024
-                  </p>
-                  <h4 className="font-semibold text-blue-800">Mid Exam</h4>
-                  <p className="text-sm text-gray-600">
-                    Applied my skills in a project-based examination, further
-                    solidifying my development process and problem-solving
-                    abilities.
-                  </p>
-                </div>
-                {/* Timeline Item 3 */}
-                <div className="relative">
-                  <div className="absolute -left-[42px] top-1 w-4 h-4 bg-blue-700 rounded-full border-4 border-gray-100 ring-4 ring-white shadow-sm"></div>
-                  <p className="font-mono text-sm text-blue-700 font-medium">
-                    Present
-                  </p>
-                  <h4 className="font-semibold text-blue-800">
-                    President University x PT. Mattel Indonesia
-                  </h4>
-                  <p className="text-sm text-gray-600">
-                    Expanding my skill set by bridging gameplay with web
-                    platforms, utilizing React and Node.js to create
-                    interconnected experiences.
+
+                <div className="text-center pt-2">
+                  <p className="text-sm text-gray-500">
+                    Ready for the next challenge 
                   </p>
                 </div>
               </div>

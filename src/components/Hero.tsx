@@ -45,6 +45,7 @@ export default function Hero() {
               Muhammad Fadel
             </span>
           </motion.h1>
+
           {/* Live Typing Animation with Navy Blue Theme */}
           <motion.div
             variants={itemVariants}
@@ -53,10 +54,6 @@ export default function Hero() {
             <TypeAnimation
               sequence={[
                 "<Game Developer />",
-                2000,
-                "<Problem Solver />",
-                2000,
-                "<Creative Coder />",
                 2000,
               ]}
               wrapper="span"
@@ -68,9 +65,7 @@ export default function Hero() {
             variants={itemVariants}
             className="text-gray-700 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-8"
           >
-            Crafting interactive and immersive digital experiences with modern
-            technologies. Passionate about creating engaging solutions that make
-            a difference.
+           "Developing innovative games with a focus on immersive gameplay and compelling mechanics."
           </motion.p>{" "}
           <motion.div
             variants={itemVariants}

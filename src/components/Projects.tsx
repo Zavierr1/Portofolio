@@ -6,6 +6,9 @@ import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 import vrProjectImage from "../assets/images/vr_map2_T.png";
+import outbreakImage from "../assets/images/Outbreak.png"
+import fkImage from "../assets/images/freaky_hollow.png"
+import raturuImage from "../assets/images/raturu.png"
 
 // --- Reusable Grid Pattern (from other sections) ---
 const GridPattern = () => (
@@ -110,36 +113,32 @@ export default function Projects() {
       title: "VR 3D Assessment Game",
       description:
         "An immersive virtual reality experience developed in Unity for corporate training. Features complex interaction systems, performance tracking, and a dynamic environment that reacts to user input.",
-      tech: ["Unity", "C#", "Oculus SDK", "Blender"],
+      tech: ["Unity", "Oculus SDK", "Blender"],
       image: vrProjectImage,
-      github: "#",
       live: "#",
     },
     {
       title: "Outbreak",
       description:
         "A top-down survival game built for a 48-hour Game Jam. Features procedural level generation, enemy AI, and a real-time inventory system.",
-      tech: ["Unity", "C#", "Aseprite"],
-      image: "https://placehold.co/600x400/fb923c/ffffff?text=Outbreak",
-      github: "#",
+      tech: ["Unity", "Blender"],
+      image: outbreakImage,
       live: "#",
     },
     {
-      title: "Raturu",
+      title: "Raturu Home Fever",
       description:
         "The very portfolio you are browsing now. A fully interactive web experience built with React and Three.js, featuring a cohesive sci-fi theme.",
-      tech: ["React", "Three.js (R3F)", "Framer Motion", "TailwindCSS"],
-      image: "https://placehold.co/600x400/fdba74/ffffff?text=Raturu",
-      github: "#",
+      tech: ["Unity", "Blender"],
+      image: raturuImage,
       live: "#",
     },
     {
       title: "Freaky Hollow",
       description:
         "A narrative-driven horror game prototype with atmospheric level design and scripted events to build suspense.",
-      tech: ["Unreal Engine", "Blueprints", "Blender"],
-      image: "https://placehold.co/600x400/fca5a5/ffffff?text=Freaky+Hollow",
-      github: "#",
+      tech: ["Unity", "Aseprite"],
+      image: fkImage,
       live: "#",
     },
   ];
@@ -178,8 +177,7 @@ export default function Projects() {
               <h3 className="text-2xl font-mono text-blue-700 mb-4 pl-4 border-l-4 border-blue-600">
                 [ Other Projects ]
               </h3>
-              <div className="relative flex flex-col md:flex-row gap-8 rounded-3xl p-4 backdrop-blur-sm bg-white border border-blue-200/50 shadow-lg hover:shadow-xl hover:shadow-blue-800/10 transition-all duration-300">
-                {/* File Tabs */}
+              <div className="relative flex flex-col md:flex-row gap-8 rounded-3xl p-4 backdrop-blur-sm bg-white border border-blue-200/50 shadow-lg hover:shadow-xl hover:shadow-blue-800/10 transition-all duration-300">                {/* File Tabs */}
                 <div className="flex md:flex-col overflow-x-auto md:overflow-x-visible md:w-1/4 pb-2 md:pb-0 border-b-2 md:border-b-0 md:border-r-2 border-blue-200/50">
                   {otherProjects.map((project, index) => (
                     <button
@@ -242,7 +240,7 @@ export default function Projects() {
                         </div>
                         <div className="flex space-x-4 mt-auto pt-4 border-t border-blue-200/50">
                           <a
-                            href={otherProjects[selectedProjectIndex].github}
+                            href={otherProjects[selectedProjectIndex]}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
