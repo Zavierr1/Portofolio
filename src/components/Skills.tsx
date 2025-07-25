@@ -8,6 +8,7 @@ import { PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import { Vector3 } from "three";
 import { random } from "maath";
+import { useInView } from "react-intersection-observer";
 
 // --- Animated Title (matching About.tsx) ---
 const AnimatedTitle = ({ text }: { text: string }) => {
@@ -32,7 +33,7 @@ function SkillGlyph({
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
   const particlesRef = useRef<THREE.Points>(null);
   const sphere = useMemo(() => {
-    const positions = new Float32Array(5000 * 3);
+    const positions = new Float32Array(1500 * 3); // Reduced from 5000 to 1500
     random.inSphere(positions, { radius: 1.8 });
     return positions;
   }, []);
@@ -111,6 +112,17 @@ function SkillGlyph({
   );
 }
 
+// Loading placeholder that matches the theme
+const SkillCardPlaceholder = () => (
+  <div className="relative h-48 flex-shrink-0 border-b-2 border-blue-200/50">
+    <div className="absolute inset-0 bg-gradient-to-b from-blue-50/80 to-transparent"></div>
+    <div className="absolute top-0 left-0 w-full h-0.5 bg-blue-600/80 animate-pulse"></div>
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+    </div>
+  </div>
+);
+
 function SkillCard({
   skill,
 }: {
@@ -123,11 +135,19 @@ function SkillCard({
   };
 }) {
   const [isHovered, setIsHovered] = useState(false);
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
   return (
     <div
-      className="group relative rounded-2xl border border-blue-200/50 shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-blue-800/10 hover:border-blue-300/60 backdrop-blur-sm bg-white flex-shrink-0 w-72"
+      ref={ref}
+      className="group relative rounded-2xl border border-blue-200/50 shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-blue-800/10 hover:border-blue-300/60 backdrop-blur-sm bg-white flex-shrink-0 w-72 sm:w-80 md:w-72"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={() => setIsHovered(true)}
+      onTouchEnd={() => setIsHovered(false)}
     >
       <div className="absolute -inset-px bg-gradient-to-r from-blue-800 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"></div>
       <div className="relative rounded-2xl flex flex-col h-full overflow-hidden">
@@ -142,13 +162,17 @@ function SkillCard({
             <p>STABILITY</p>
             <p className="text-lg text-blue-600">{skill.stability}%</p>
           </div>
-          <Canvas camera={{ position: [0, 0, 3.5], fov: 50 }}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[0, 0, 5]} intensity={100} color="#2563eb" />
-            <Suspense fallback={null}>
-              <SkillGlyph level={skill.level} isHovered={isHovered} />
-            </Suspense>
-          </Canvas>
+          {inView ? (
+            <Canvas camera={{ position: [0, 0, 3.5], fov: 50 }}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[0, 0, 5]} intensity={100} color="#2563eb" />
+              <Suspense fallback={<SkillCardPlaceholder />}>
+                <SkillGlyph level={skill.level} isHovered={isHovered} />
+              </Suspense>
+            </Canvas>
+          ) : (
+            <SkillCardPlaceholder />
+          )}
         </div>
         <div
           className="p-5 flex-grow bg-white/20"
@@ -192,8 +216,12 @@ const SkillCarousel = ({
       <div className="relative">
         <motion.div
           ref={scrollRef}
-          className="flex space-x-8 overflow-x-auto pb-4 horizontal-scrollbar"
+          className="flex space-x-4 sm:space-x-6 md:space-x-8 overflow-x-auto pb-4 px-2 sm:px-0 horizontal-scrollbar snap-x snap-mandatory"
           whileTap={{ cursor: "grabbing" }}
+          style={{
+            scrollbarWidth: 'thin',
+            scrollbarColor: '#2563eb #e5e7eb'
+          }}
         >
           {skills.map((skill, index) => (
             <motion.div

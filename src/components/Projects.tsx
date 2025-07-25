@@ -71,6 +71,8 @@ const FeaturedProjectCard = ({ project }: FeaturedProjectCardProps) => {
           <img
             src={project.image}
             alt={project.title}
+            loading="lazy"
+            decoding="async"
             className="w-full h-64 lg:h-full object-cover object-center transition-all duration-500 group-hover:scale-105"
             onError={(e) => {
               (e.target as HTMLImageElement).src =
@@ -228,6 +230,8 @@ export default function Projects() {
                         <img
                           src={otherProjects[selectedProjectIndex].image}
                           alt={otherProjects[selectedProjectIndex].title}
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-cover rounded-lg border border-blue-200/50 shadow-sm"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src =
