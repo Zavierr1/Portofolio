@@ -62,7 +62,6 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto">
         {/* Glassmorphism Card with Navy Blue Theme (matching Hero) */}
         <div className="relative backdrop-blur-sm bg-white border border-blue-200/50 rounded-3xl p-6 md:p-8 shadow-lg hover:shadow-xl hover:shadow-blue-800/10 transition-all duration-300">
-          <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-blue-600/70 rounded-br-lg"></div>
           
           <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
             {/* --- Left Side: Copyright --- */}
@@ -84,7 +83,7 @@ export default function Footer() {
                 label="GitHub"
               />
               <SocialLink
-                href="https://www.linkedin.com/in/your-profile-url"
+                href="https://www.linkedin.com/in/muhammadjafier"
                 Icon={Linkedin}
                 label="LinkedIn"
               />

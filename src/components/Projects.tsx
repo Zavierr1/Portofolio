@@ -5,6 +5,8 @@ import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { useState, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
+
+// --- Import images for projects ---
 import vrProjectImage from "../assets/images/vr_map2_T.png";
 import outbreakImage from "../assets/images/Outbreak.png"
 import fkImage from "../assets/images/freaky_hollow.png"
@@ -12,7 +14,6 @@ import raturuImage from "../assets/images/raturu.png"
 import cyberImage from "../assets/images/Cyber Security Learning Web.png";
 import runImage from "../assets/images/RUUUNNN.png";
 import spaceImage from "../assets/images/Space Shooter.png";
-
 
 // TypeScript interfaces
 interface Project {
@@ -36,37 +37,24 @@ const GridPattern = () => (
 // --- Interactive Image/Video Component ---
 const InteractiveMedia = ({ project }: { project: Project }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [showVideo, setShowVideo] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = async () => {
     setIsHovered(true);
-    if (project.video && videoLoaded) {
-      // Delay video appearance slightly for smooth transition
-      setTimeout(() => setShowVideo(true), 200);
+    if (project.video && videoRef.current) {
+      try {
+        await videoRef.current.play();
+      } catch (error) {
+        console.error('Failed to play video:', error);
+      }
     }
   };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-    setShowVideo(false);
     if (videoRef.current) {
       videoRef.current.pause();
-      videoRef.current.currentTime = 0; // Reset video to start
-    }
-  };
-
-  const handleVideoLoad = () => {
-    setVideoLoaded(true);
-    if (videoRef.current && showVideo) {
-      videoRef.current.play().catch(console.error);
-    }
-  };
-
-  const handleVideoCanPlay = () => {
-    if (videoRef.current && showVideo && isHovered) {
-      videoRef.current.play().catch(console.error);
+      videoRef.current.currentTime = 0;
     }
   };
 
@@ -85,8 +73,8 @@ const InteractiveMedia = ({ project }: { project: Project }) => {
         loading="lazy"
         decoding="async"
         className={`w-full h-full object-cover object-center transition-all duration-500 ${
-          isHovered ? 'scale-105' : ''
-        } ${showVideo && project.video ? 'opacity-0' : 'opacity-100'}`}
+          isHovered && project.video ? 'opacity-30' : 'opacity-100'
+        }`}
         onError={(e) => {
           (e.target as HTMLImageElement).src =
             "https://placehold.co/800x600/ffedd5/f97316?text=IMAGE+N/A";
@@ -102,21 +90,17 @@ const InteractiveMedia = ({ project }: { project: Project }) => {
           loop
           playsInline
           preload="metadata"
-          onLoadedData={handleVideoLoad}
-          onCanPlay={handleVideoCanPlay}
           className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 ${
-            showVideo ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
+            isHovered ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
           }`}
-          onError={() => {
-            console.warn(`Failed to load video: ${project.video}`);
-            setVideoLoaded(false);
-            setShowVideo(false);
+          onError={(e) => {
+            console.error('Video error:', e);
           }}
         />
       )}
       
       {/* Play Indicator */}
-      {project.video && !showVideo && videoLoaded && (
+      {project.video && !isHovered && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover/media:opacity-100 group-active:opacity-100 transition-opacity duration-300">
           <div className="bg-white/90 rounded-full p-2 sm:p-3 shadow-lg">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-blue-600 sm:w-6 sm:h-6">
@@ -127,14 +111,14 @@ const InteractiveMedia = ({ project }: { project: Project }) => {
       )}
       
       {/* Hover Hint */}
-      {project.video && !isHovered && videoLoaded && (
+      {project.video && !isHovered && (
         <div className="absolute bottom-4 right-4 bg-black/70 text-white text-xs px-2 py-1 rounded opacity-0 group-hover/media:opacity-100 transition-opacity duration-300 hidden sm:block">
           Hover to preview
         </div>
       )}
       
       {/* Mobile Tap Hint */}
-      {project.video && !isHovered && videoLoaded && (
+      {project.video && !isHovered && (
         <div className="absolute bottom-4 right-4 bg-black/70 text-white text-xs px-2 py-1 rounded opacity-0 group-active:opacity-100 transition-opacity duration-300 sm:hidden">
           Tap to preview
         </div>
@@ -232,7 +216,7 @@ export default function Projects() {
         "A fpp zombie survival game. Features graphical improvements, post processing effects, enemy AI, and a real-time inventory system.",
       tech: ["Unity", "C#", "Blender"],
       image: outbreakImage,
-      video: "/videos/outbreak-demo.mp4", 
+      video: "/videos/outbreak.mp4", 
     },
     {
       title: "Raturu Home Fever",
@@ -240,7 +224,7 @@ export default function Projects() {
         "This is the game that our team created at GIMJAM ITB. A simple horror game when the the main character, who has a fever, is brought into a dream world and must face several obstacles to get out of the dream and finish the game",
       tech: ["Unity", "C#", "Blender"],
       image: raturuImage,
-      video: "/videos/raturu-demo.mp4", 
+      video: "/videos/raturu.mp4", 
       download: "https://baraaaa.itch.io/raturu-home-fever",
     },
     {
@@ -249,7 +233,7 @@ export default function Projects() {
         "A 2D Platformer Game based on Hollow Knight references. It can dash, jump, wall jump, wall slide, and attack enemies. The game features a simple scoring system based on the number of enemies defeated.",
       tech: ["Unity", "C#", "Aseprite"],
       image: fkImage,
-      video: "/videos/freaky-demo.mp4",
+      video: "/videos/freaky.mp4",
     },
     {
       title: "Cyber Security Learning Web",
@@ -264,7 +248,7 @@ export default function Projects() {
         "A simple endless runner game featuring raycast for detecting obstacles, collectible (coins) add +100 score, and can really jump HIGH. There is no specific goal in this game what player do it's actually just run",
       tech: ["Unity", "C#", "Blender"],
       image: runImage, 
-      video: "/videos/puzzle-quest-demo.mp4", 
+      video: "/videos/run.mp4", 
     },
     {
       title: "Ultimate Rizzler",
@@ -272,7 +256,7 @@ export default function Projects() {
         "An Space Shooter game also the first game i created. Like the other space shooter game, you can move left and right, and shoot. The game features a simple scoring system based on the number of enemies defeated.  And in this game we fighting PAPI LEBRON and BIG BLACK PAPI LEBRON for the bosses",
       tech: ["Unity", "C#", "Aseprite"],
       image: spaceImage,  
-      video: "/videos/ai-chat-demo.mp4", 
+      video: "/videos/space-shooter.mp4", 
     },
   ];
 
