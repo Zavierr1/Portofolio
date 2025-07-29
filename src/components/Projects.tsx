@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -16,8 +16,7 @@ interface Project {
   description: string;
   tech: string[];
   image: string;
-  live: string;
-  github?: string; // Optional since not all projects have GitHub links
+  demo: string; 
 }
 
 interface FeaturedProjectCardProps {
@@ -99,16 +98,7 @@ const FeaturedProjectCard = ({ project }: FeaturedProjectCardProps) => {
           </div>
           <div className="flex space-x-4 mt-auto pt-4 border-t border-blue-200/50">
             <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors duration-300"
-            >
-              <Github size={18} />
-              <span>Code</span>
-            </a>
-            <a
-              href={project.live}
+              href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors duration-300"
@@ -131,7 +121,7 @@ export default function Projects() {
         "An immersive virtual reality experience developed in Unity for corporate training. Features complex interaction systems, performance tracking, and a dynamic environment that reacts to user input.",
       tech: ["Unity", "Oculus SDK", "Blender"],
       image: vrProjectImage,
-      live: "#",
+      demo: "#",
     },
     {
       title: "Outbreak",
@@ -139,7 +129,7 @@ export default function Projects() {
         "A top-down survival game built for a 48-hour Game Jam. Features procedural level generation, enemy AI, and a real-time inventory system.",
       tech: ["Unity", "Blender"],
       image: outbreakImage,
-      live: "#",
+      demo: "#",
     },
     {
       title: "Raturu Home Fever",
@@ -147,7 +137,7 @@ export default function Projects() {
         "The very portfolio you are browsing now. A fully interactive web experience built with React and Three.js, featuring a cohesive sci-fi theme.",
       tech: ["Unity", "Blender"],
       image: raturuImage,
-      live: "#",
+      demo: "#",
     },
     {
       title: "Freaky Hollow",
@@ -155,7 +145,7 @@ export default function Projects() {
         "A narrative-driven horror game prototype with atmospheric level design and scripted events to build suspense.",
       tech: ["Unity", "Aseprite"],
       image: fkImage,
-      live: "#",
+      demo: "#",
     },
   ];
 
@@ -257,13 +247,13 @@ export default function Projects() {
                         </div>
                         <div className="flex space-x-4 mt-auto pt-4 border-t border-blue-200/50">
                           <a
-                            href={otherProjects[selectedProjectIndex].live}
+                            href={otherProjects[selectedProjectIndex].demo}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
                           >
                             <ExternalLink size={18} />
-                            <span>Live Demo</span>
+                            <span>Watch Demo</span>
                           </a>
                         </div>
                       </div>

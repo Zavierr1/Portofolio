@@ -305,6 +305,13 @@ export default function Skills() {
         stability: "94.6",
       },
       {
+        name: "Aseprite",
+        level: "Intermediate",
+        class: "Tier-II",
+        id: "#BLN-BAS",
+        stability: "94.6",
+      },
+      {
         name: "Git",
         level: "Advanced",
         class: "Tier-III",

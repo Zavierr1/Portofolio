@@ -79,7 +79,7 @@ export default function Hero() {
               },
               {
                 icon: Linkedin,
-                href: "https://www.linkedin.com/in/your-profile-url",
+                href: "https://www.linkedin.com/in/muhammadjafier",
                 label: "LinkedIn",
               },
               { icon: Mail, href: "#contact", label: "Email" },
