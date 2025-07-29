@@ -1,14 +1,22 @@
 "use client";
 
-import { useState, useRef, useMemo, Suspense } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Points } from "@react-three/drei";
-import { PointMaterial } from "@react-three/drei";
-import * as THREE from "three";
-import { Vector3 } from "three";
-import { random } from "maath";
 import { useInView } from "react-intersection-observer";
+import {
+  SiUnity,
+  SiSharp,  
+  SiReact,
+  SiThreedotjs,
+  SiTypescript,
+  SiJavascript,
+  SiNodedotjs,
+  SiBlender,
+  SiGit,
+  SiVite,
+} from "react-icons/si";
+import { FaPaintBrush } from "react-icons/fa"; // For fallback icons
+import AsepriteIcon from "../assets/icons/aseprite.png";
 
 // --- Animated Title (matching About.tsx) ---
 const AnimatedTitle = ({ text }: { text: string }) => {
@@ -21,104 +29,118 @@ const AnimatedTitle = ({ text }: { text: string }) => {
   );
 };
 
-// --- SkillGlyph with Orange Theme ---
-function SkillGlyph({
+// --- Skill Icon Component ---
+function SkillIcon({
+  skillName,
   level,
   isHovered,
 }: {
+  skillName: string;
   level: string;
   isHovered: boolean;
 }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
-  const particlesRef = useRef<THREE.Points>(null);
-  const sphere = useMemo(() => {
-    const positions = new Float32Array(1500 * 3); // Reduced from 5000 to 1500
-    random.inSphere(positions, { radius: 1.8 });
-    return positions;
-  }, []);
-
-  useFrame((_, delta) => {
-    if (meshRef.current) meshRef.current.rotation.y += 0.005;
-    if (particlesRef.current) particlesRef.current.rotation.y += 0.002;
-    if (materialRef.current) {
-      materialRef.current.emissiveIntensity = THREE.MathUtils.lerp(
-        materialRef.current.emissiveIntensity,
-        isHovered ? 2.5 : 0.4,
-        delta * 5
-      );
+  // Get the appropriate icon for each skill
+  const getIcon = (name: string) => {
+    switch (name.toLowerCase()) {
+      case "unity":
+        return SiUnity;
+      case "c#":
+        return SiSharp;
+      case "react":
+        return SiReact;
+      case "three.js":
+        return SiThreedotjs;
+      case "typescript":
+        return SiTypescript;
+      case "javascript":
+        return SiJavascript;
+      case "node.js":
+        return SiNodedotjs;
+      case "blender":
+        return SiBlender;
+      case "git":
+        return SiGit;
+      case "vite":
+        return SiVite;
+      case "aseprite":
+        return "image"; // Special case for image
+      default:
+        return FaPaintBrush;
     }
-    if (meshRef.current) {
-      const targetScale = isHovered ? 1.15 : 1;
-      meshRef.current.scale.lerp(
-        new Vector3(targetScale, targetScale, targetScale),
-        delta * 5
-      );
-    }
-  });
+  };
 
-  const { geometry, color } = (() => {
+  // Get skill level color (keeping your blue theme)
+  const getLevelColor = (level: string) => {
     switch (level.toLowerCase()) {
       case "expert":
-        return {
-          geometry: <icosahedronGeometry args={[1, 0]} />,
-          color: "#1e40af",
-        };
+        return "#1e40af"; // Dark blue
       case "advanced":
-        return {
-          geometry: <dodecahedronGeometry args={[0.9, 0]} />,
-          color: "#2563eb",
-        };
-      case "proficient":
-        return {
-          geometry: <octahedronGeometry args={[1, 0]} />,
-          color: "#3b82f6",
-        };
+        return "#2563eb"; // Medium blue
+      case "intermediate":
+        return "#3b82f6"; // Blue
       default:
-        return {
-          geometry: <boxGeometry args={[1.2, 1.2, 1.2]} />,
-          color: "#60a5fa",
-        };
+        return "#60a5fa"; // Light blue
     }
-  })();
+  };
+
+  const IconComponent = getIcon(skillName);
+  const iconColor = getLevelColor(level);
 
   return (
-    <group>
-      <mesh ref={meshRef}>
-        {geometry}
-        <meshStandardMaterial
-          ref={materialRef}
-          wireframe
-          color={color}
-          emissive={color}
-          emissiveIntensity={0.4}
-        />
-      </mesh>
-      <Points
-        ref={particlesRef}
-        positions={sphere}
-        stride={3}
-        frustumCulled={false}
+    <div className="relative flex items-center justify-center h-full w-full">
+      <motion.div
+        animate={{
+          scale: isHovered ? 1.15 : 1,
+          rotate: isHovered ? 5 : 0,
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="relative"
       >
-        <PointMaterial
-          transparent
-          color="#2563eb"
-          size={0.008}
-          sizeAttenuation={true}
-          depthWrite={false}
-        />
-      </Points>
-    </group>
+        {/* Handle special case for Aseprite image */}
+        {IconComponent === "image" ? (
+          <img
+            src={AsepriteIcon}
+            alt={skillName}
+            className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 object-contain"
+            style={{
+              filter: isHovered ? `drop-shadow(0 0 20px ${iconColor}40) brightness(1.1)` : 'brightness(0.9)',
+              transition: 'all 0.3s ease',
+            }}
+          />
+        ) : (
+          <div className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 flex items-center justify-center">
+            <IconComponent
+              className="w-full h-full"
+              style={{
+                color: iconColor,
+                filter: isHovered ? `drop-shadow(0 0 20px ${iconColor}40)` : 'none',
+                transition: 'all 0.3s ease',
+              }}
+            />
+          </div>
+        )}
+        {/* Subtle background glow */}
+        {isHovered && (
+          <div
+            className="absolute inset-0 rounded-full blur-xl opacity-30"
+            style={{
+              backgroundColor: iconColor,
+              transform: 'scale(1.5)',
+            }}
+          />
+        )}
+      </motion.div>
+    </div>
   );
 }
 
 // Loading placeholder that matches the theme
 const SkillCardPlaceholder = () => (
-  <div className="relative h-48 flex-shrink-0 border-b-2 border-blue-200/50">
+  <div className="relative h-40 sm:h-44 md:h-48 flex-shrink-0 border-b-2 border-blue-200/50">
     <div className="absolute inset-0 bg-gradient-to-b from-blue-50/80 to-transparent"></div>
     <div className="absolute top-0 left-0 w-full h-0.5 bg-blue-600/80 animate-pulse"></div>
     <div className="absolute inset-0 flex items-center justify-center">
-      <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+      <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
     </div>
   </div>
 );
@@ -129,9 +151,6 @@ function SkillCard({
   skill: {
     name: string;
     level: string;
-    class: string;
-    id: string;
-    stability: string;
   };
 }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -143,7 +162,7 @@ function SkillCard({
   return (
     <div
       ref={ref}
-      className="group relative rounded-2xl border border-blue-200/50 shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-blue-800/10 hover:border-blue-300/60 backdrop-blur-sm bg-white flex-shrink-0 w-72 sm:w-80 md:w-72"
+      className="group relative rounded-2xl border border-blue-200/50 shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-blue-800/10 hover:border-blue-300/60 backdrop-blur-sm bg-white flex-shrink-0 w-64 sm:w-72 md:w-80 lg:w-72 active:scale-95 touch-manipulation"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={() => setIsHovered(true)}
@@ -151,38 +170,28 @@ function SkillCard({
     >
       <div className="absolute -inset-px bg-gradient-to-r from-blue-800 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"></div>
       <div className="relative rounded-2xl flex flex-col h-full overflow-hidden">
-        <div className="relative h-48 flex-shrink-0 border-b-2 border-blue-200/50">
+        <div className="relative h-40 sm:h-44 md:h-48 flex-shrink-0 border-b-2 border-blue-200/50">
           <div className="absolute inset-0 bg-gradient-to-b from-blue-50/80 to-transparent"></div>
           <div className="absolute top-0 left-0 w-full h-0.5 bg-blue-600/80 animate-pulse group-hover:bg-blue-700"></div>
-          <div className="absolute top-2 left-3 text-blue-700 font-mono text-[10px] opacity-70 group-hover:opacity-100 transition-opacity">
-            <p>CLASS: {skill.class}</p>
-            <p>ID: {skill.id}</p>
-          </div>
-          <div className="absolute top-2 right-3 text-right text-blue-700 font-mono text-[10px] opacity-70 group-hover:opacity-100 transition-opacity">
-            <p>STABILITY</p>
-            <p className="text-lg text-blue-600">{skill.stability}%</p>
-          </div>
           {inView ? (
-            <Canvas camera={{ position: [0, 0, 3.5], fov: 50 }}>
-              <ambientLight intensity={0.5} />
-              <pointLight position={[0, 0, 5]} intensity={100} color="#2563eb" />
-              <Suspense fallback={<SkillCardPlaceholder />}>
-                <SkillGlyph level={skill.level} isHovered={isHovered} />
-              </Suspense>
-            </Canvas>
+            <SkillIcon 
+              skillName={skill.name} 
+              level={skill.level} 
+              isHovered={isHovered} 
+            />
           ) : (
             <SkillCardPlaceholder />
           )}
         </div>
         <div
-          className="p-5 flex-grow bg-white/20"
+          className="p-4 sm:p-5 flex-grow bg-white/20"
           style={{
             backgroundImage:
               "radial-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px)",
             backgroundSize: "0.5rem 0.5rem",
           }}
         >
-          <h3 className="text-xl font-bold text-blue-800 mb-1">{skill.name}</h3>
+          <h3 className="text-lg sm:text-xl font-bold text-blue-800 mb-1">{skill.name}</h3>
           <p className="text-sm text-blue-700 font-semibold mb-3">
             {skill.level}
           </p>
@@ -201,26 +210,24 @@ const SkillCarousel = ({
   skills: {
     name: string;
     level: string;
-    class: string;
-    id: string;
-    stability: string;
   }[];
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="mb-12">
-      <h3 className="text-2xl font-mono text-blue-700 mb-4 pl-4 border-l-4 border-blue-600">
+    <div className="mb-8 sm:mb-12">
+      <h3 className="text-xl sm:text-2xl font-mono text-blue-700 mb-3 sm:mb-4 pl-3 sm:pl-4 border-l-4 border-blue-600">
         {category}
       </h3>
       <div className="relative">
         <motion.div
           ref={scrollRef}
-          className="flex space-x-4 sm:space-x-6 md:space-x-8 overflow-x-auto pb-4 px-2 sm:px-0 horizontal-scrollbar snap-x snap-mandatory"
+          className="flex space-x-3 sm:space-x-4 md:space-x-6 lg:space-x-8 overflow-x-auto pb-4 px-2 sm:px-4 md:px-0 horizontal-scrollbar snap-x snap-mandatory scroll-smooth"
           whileTap={{ cursor: "grabbing" }}
           style={{
             scrollbarWidth: 'thin',
-            scrollbarColor: '#2563eb #e5e7eb'
+            scrollbarColor: '#2563eb #e5e7eb',
+            WebkitOverflowScrolling: 'touch'
           }}
         >
           {skills.map((skill, index) => (
@@ -230,11 +237,17 @@ const SkillCarousel = ({
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ root: scrollRef, once: true }}
+              className="snap-center"
             >
               <SkillCard skill={skill} />
             </motion.div>
           ))}
         </motion.div>
+        
+        {/* Mobile scroll indicator */}
+        <div className="block sm:hidden text-center mt-2">
+          <p className="text-xs text-gray-500">← Swipe to explore more →</p>
+        </div>
       </div>
     </div>
   );
@@ -247,83 +260,50 @@ export default function Skills() {
       {
         name: "Unity",
         level: "Advanced",
-        class: "Tier-III",
-        id: "#U3D-ADV",
-        stability: "98.2",
       },
       {
         name: "C#",
-        level: "intermediate",
-        class: "Tier-III",
-        id: "#CS-ADV",
-        stability: "99.1",
+        level: "Intermediate",
       },
     ],
     frontend: [
       {
         name: "React",
         level: "Learning",
-        class: "Tier-II",
-        id: "#RJS-PRO",
-        stability: "97.5",
       },
       {
         name: "Three.js",
         level: "Learning",
-        class: "Tier-II",
-        id: "#TJS-PRO",
-        stability: "96.4",
       },
       {
         name: "TypeScript",
         level: "Learning",
-        class: "Tier-II",
-        id: "#TS-PRO",
-        stability: "98.9",
       },
       {
         name: "JavaScript",
         level: "Learning",
-        class: "Tier-II",
-        id: "#JS-PRO",
-        stability: "98.9",
       },
     ],
     backend: [
       {
         name: "Node.js",
         level: "Learning",
-        class: "Tier-I",
-        id: "#NJS-BAS",
-        stability: "95.2",
       },
       {
         name: "Blender",
         level: "Basic",
-        class: "Tier-I",
-        id: "#BLN-BAS",
-        stability: "94.6",
       },
       {
         name: "Aseprite",
         level: "Intermediate",
-        class: "Tier-II",
-        id: "#BLN-BAS",
-        stability: "94.6",
       },
       {
         name: "Git",
         level: "Advanced",
-        class: "Tier-III",
-        id: "#GIT-ADV",
-        stability: "99.5",
       },
       {
         name: "Vite",
         level: "Basic",
-        class: "Tier-III",
-        id: "#GIT-ADV",
-        stability: "97.5",
       },
     ],
   };
@@ -339,7 +319,7 @@ export default function Skills() {
           </p>
         </div>
 
-        <div className="space-y-16">
+        <div className="space-y-12 sm:space-y-16">
           <SkillCarousel
             category="Game Development"
             skills={skillsData.gameDev}

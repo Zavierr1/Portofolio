@@ -27,8 +27,8 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-white px-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 w-full">
         {" "}
         {/* Glassmorphism Card with Navy Blue Theme */}
         <motion.div
@@ -39,7 +39,7 @@ export default function Hero() {
         >
           <motion.h1
             variants={itemVariants}
-            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
+            className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
           >
             <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">
               Muhammad Fadel
@@ -49,7 +49,7 @@ export default function Hero() {
           {/* Live Typing Animation with Navy Blue Theme */}
           <motion.div
             variants={itemVariants}
-            className="text-xl md:text-2xl lg:text-3xl text-blue-700 mb-6 h-10"
+            className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-blue-700 mb-6 h-8 sm:h-10"
           >
             <TypeAnimation
               sequence={[
@@ -63,7 +63,7 @@ export default function Hero() {
           </motion.div>
           <motion.p
             variants={itemVariants}
-            className="text-gray-700 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-8"
+            className="text-gray-700 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-8"
           >
            "Developing innovative games with a focus on immersive gameplay and compelling mechanics."
           </motion.p>{" "}

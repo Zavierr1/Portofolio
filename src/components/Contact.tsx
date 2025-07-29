@@ -23,7 +23,7 @@ const GridPattern = () => (
 // --- Reusable Animated Title (from other sections) ---
 const AnimatedTitle = ({ text }: { text: string }) => {
   return (
-    <h2 className="text-4xl md:text-5xl font-bold mb-4">
+    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
       <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">
         {text}
       </span>
@@ -126,12 +126,11 @@ export default function Contact() {
           variants={cardVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="relative grid lg:grid-cols-2 gap-8 backdrop-blur-sm bg-white border border-blue-200/50 rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-xl hover:shadow-blue-800/10 transition-all duration-300">
-          <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-blue-600/70 rounded-br-lg"></div>
+          className="relative grid lg:grid-cols-2 gap-6 lg:gap-8 backdrop-blur-sm bg-white border border-blue-200/50 rounded-3xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl hover:shadow-blue-800/10 transition-all duration-300">
           {/* --- LEFT SIDE: Info & Icon --- */}
           <div className="flex flex-col justify-between">
             <div>
-              <h3 className="text-2xl font-bold mb-6 text-blue-800">
+              <h3 className="text-xl sm:text-2xl font-bold mb-6 text-blue-800">
                 Contact Information
               </h3>
               <motion.div className="space-y-4" variants={cardVariants}>
@@ -145,7 +144,7 @@ export default function Contact() {
                   {
                     icon: MapPin,
                     label: "Location",
-                    value: "North Cikarang, Bekasi",
+                    value: "Bekasi, Indonesia",
                   },
                 ].map(({ icon: Icon, label, value }) => (
                   <motion.div
@@ -172,13 +171,13 @@ export default function Contact() {
           </div>
 
           {/* --- RIGHT SIDE: Contact Form --- */}
-          <div className="border-t-2 lg:border-t-0 lg:border-l-2 border-blue-200/50 pt-8 lg:pt-0 lg:pl-8">
-            <h3 className="text-2xl font-bold mb-6 text-blue-800">
+          <div className="border-t-2 lg:border-t-0 lg:border-l-2 border-blue-200/50 pt-6 lg:pt-0 lg:pl-8">
+            <h3 className="text-xl sm:text-2xl font-bold mb-6 text-blue-800">
               Send a Message
             </h3>
-            <form onSubmit={handleSubmit} className="flex flex-col space-y-6">
+            <form onSubmit={handleSubmit} className="flex flex-col space-y-4 sm:space-y-6">
               {/* Full Name and Email in a row on larger screens */}
-              <div className="flex flex-col md:flex-row md:space-x-4 space-y-6 md:space-y-0">
+              <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
                 <div className="flex-1">
                   <label
                     htmlFor="name"
@@ -253,7 +252,7 @@ export default function Contact() {
                   required
                   rows={5}
                   className="w-full px-4 py-3 border border-blue-200/50 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors resize-vertical backdrop-blur-sm bg-white/80"
-                  placeholder="Tell me about your project, ideas, or just say hello..."
+                  placeholder="Tell me about your ideas, project, or anything else you'd like to discuss..."
                 />
               </div>
               {/* Submit Button */}

@@ -20,7 +20,7 @@ const AnimatedTitle = ({ text }: { text: string }) => {
       animate={inView ? "visible" : "hidden"}
       variants={variants}
     >
-      <h2 className="text-4xl md:text-5xl font-bold mb-4">
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
         <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">
           {text}
         </span>
@@ -57,9 +57,9 @@ const DataPod = ({
       variants={variants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
-      className="relative backdrop-blur-sm bg-white border border-blue-200/50 rounded-2xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-blue-800/10 hover:border-blue-300/60"
+      className="relative backdrop-blur-sm bg-white border border-blue-200/50 rounded-2xl p-4 sm:p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-blue-800/10 hover:border-blue-300/60"
     >
-      <h3 className="text-xl font-bold text-blue-800 mb-4">{title}</h3>
+      <h3 className="text-lg sm:text-xl font-bold text-blue-800 mb-4">{title}</h3>
       <div className="text-gray-700 leading-relaxed space-y-3">{children}</div>
     </motion.div>
   );
@@ -76,7 +76,7 @@ export default function About() {
           <div className="w-24 h-1 bg-gradient-to-r from-blue-800 to-blue-600 mx-auto rounded-full"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* --- Pod 1: Bio --- */}
           <div className="lg:col-span-2">
             <DataPod title="[ Player Profile ]">

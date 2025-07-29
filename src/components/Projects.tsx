@@ -1,14 +1,18 @@
 "use client";
 
-import { ExternalLink } from "lucide-react";
+import { Download } from "lucide-react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
 import vrProjectImage from "../assets/images/vr_map2_T.png";
 import outbreakImage from "../assets/images/Outbreak.png"
 import fkImage from "../assets/images/freaky_hollow.png"
 import raturuImage from "../assets/images/raturu.png"
+import cyberImage from "../assets/images/Cyber Security Learning Web.png";
+import runImage from "../assets/images/RUUUNNN.png";
+import spaceImage from "../assets/images/Space Shooter.png";
+
 
 // TypeScript interfaces
 interface Project {
@@ -16,7 +20,8 @@ interface Project {
   description: string;
   tech: string[];
   image: string;
-  demo: string; 
+  video?: string; // Optional video file for hover preview
+  download?: string; // Optional download link
 }
 
 interface FeaturedProjectCardProps {
@@ -27,6 +32,116 @@ interface FeaturedProjectCardProps {
 const GridPattern = () => (
   <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] opacity-10 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
 );
+
+// --- Interactive Image/Video Component ---
+const InteractiveMedia = ({ project }: { project: Project }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    if (project.video && videoLoaded) {
+      // Delay video appearance slightly for smooth transition
+      setTimeout(() => setShowVideo(true), 200);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setShowVideo(false);
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0; // Reset video to start
+    }
+  };
+
+  const handleVideoLoad = () => {
+    setVideoLoaded(true);
+    if (videoRef.current && showVideo) {
+      videoRef.current.play().catch(console.error);
+    }
+  };
+
+  const handleVideoCanPlay = () => {
+    if (videoRef.current && showVideo && isHovered) {
+      videoRef.current.play().catch(console.error);
+    }
+  };
+
+  return (
+    <div 
+      className="relative w-full h-64 md:h-72 lg:h-full overflow-hidden group/media"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleMouseEnter}
+      onTouchEnd={handleMouseLeave}
+    >
+      {/* Static Image */}
+      <img
+        src={project.image}
+        alt={project.title}
+        loading="lazy"
+        decoding="async"
+        className={`w-full h-full object-cover object-center transition-all duration-500 ${
+          isHovered ? 'scale-105' : ''
+        } ${showVideo && project.video ? 'opacity-0' : 'opacity-100'}`}
+        onError={(e) => {
+          (e.target as HTMLImageElement).src =
+            "https://placehold.co/800x600/ffedd5/f97316?text=IMAGE+N/A";
+        }}
+      />
+      
+      {/* Video Overlay */}
+      {project.video && (
+        <video
+          ref={videoRef}
+          src={project.video}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onLoadedData={handleVideoLoad}
+          onCanPlay={handleVideoCanPlay}
+          className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 ${
+            showVideo ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
+          }`}
+          onError={() => {
+            console.warn(`Failed to load video: ${project.video}`);
+            setVideoLoaded(false);
+            setShowVideo(false);
+          }}
+        />
+      )}
+      
+      {/* Play Indicator */}
+      {project.video && !showVideo && videoLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover/media:opacity-100 group-active:opacity-100 transition-opacity duration-300">
+          <div className="bg-white/90 rounded-full p-2 sm:p-3 shadow-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-blue-600 sm:w-6 sm:h-6">
+              <path d="M8 5v14l11-7z" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
+      )}
+      
+      {/* Hover Hint */}
+      {project.video && !isHovered && videoLoaded && (
+        <div className="absolute bottom-4 right-4 bg-black/70 text-white text-xs px-2 py-1 rounded opacity-0 group-hover/media:opacity-100 transition-opacity duration-300 hidden sm:block">
+          Hover to preview
+        </div>
+      )}
+      
+      {/* Mobile Tap Hint */}
+      {project.video && !isHovered && videoLoaded && (
+        <div className="absolute bottom-4 right-4 bg-black/70 text-white text-xs px-2 py-1 rounded opacity-0 group-active:opacity-100 transition-opacity duration-300 sm:hidden">
+          Tap to preview
+        </div>
+      )}
+    </div>
+  );
+};
 
 // --- Reusable Animated Title (from other sections) ---
 const AnimatedTitle = ({ text }: { text: string }) => {
@@ -60,24 +175,11 @@ const FeaturedProjectCard = ({ project }: FeaturedProjectCardProps) => {
       animate={inView ? "visible" : "hidden"}
       className="group relative rounded-3xl backdrop-blur-sm bg-white border border-blue-200/50 shadow-lg hover:shadow-xl hover:shadow-blue-800/10 transition-all duration-300"
     >
-      {/* Decorative Corner Brackets (matching Hero style) */}
-      <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-blue-600/70 rounded-tl-lg"></div>
-      <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-blue-600/70 rounded-br-lg"></div>
       {/* Floating accent elements */}
       <div className="absolute bottom-6 left-6 w-1 h-1 bg-blue-600 rounded-full animate-ping"></div>
       <div className="relative rounded-3xl overflow-hidden flex flex-col lg:flex-row">
         <div className="relative lg:w-3/5">
-          <img
-            src={project.image}
-            alt={project.title}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-64 lg:h-full object-cover object-center transition-all duration-500 group-hover:scale-105"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src =
-                "https://placehold.co/800x600/ffedd5/f97316?text=IMAGE+N/A";
-            }}
-          />
+          <InteractiveMedia project={project} />
         </div>
         <div className="p-8 lg:w-2/5 flex flex-col">
           <h3 className="text-2xl font-bold text-blue-800 mb-2">
@@ -97,15 +199,17 @@ const FeaturedProjectCard = ({ project }: FeaturedProjectCardProps) => {
             ))}
           </div>
           <div className="flex space-x-4 mt-auto pt-4 border-t border-blue-200/50">
-            <a
-              href={project.demo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors duration-300"
-            >
-              <ExternalLink size={18} />
-              <span>Live Demo</span>
-            </a>
+            {project.download && (
+              <a
+                href={project.download}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors duration-300"
+              >
+                <Download size={18} />
+                <span>Itch.io</span>
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -119,33 +223,56 @@ export default function Projects() {
       title: "VR 3D Assessment Game",
       description:
         "An immersive virtual reality experience developed in Unity for corporate training. Features complex interaction systems, performance tracking, and a dynamic environment that reacts to user input.",
-      tech: ["Unity", "Oculus SDK", "Blender"],
+      tech: ["Unity", "C#", "Oculus SDK", "Blender"],
       image: vrProjectImage,
-      demo: "#",
     },
     {
       title: "Outbreak",
       description:
-        "A top-down survival game built for a 48-hour Game Jam. Features procedural level generation, enemy AI, and a real-time inventory system.",
-      tech: ["Unity", "Blender"],
+        "A fpp zombie survival game. Features graphical improvements, post processing effects, enemy AI, and a real-time inventory system.",
+      tech: ["Unity", "C#", "Blender"],
       image: outbreakImage,
-      demo: "#",
+      video: "/videos/outbreak-demo.mp4", 
     },
     {
       title: "Raturu Home Fever",
       description:
-        "The very portfolio you are browsing now. A fully interactive web experience built with React and Three.js, featuring a cohesive sci-fi theme.",
-      tech: ["Unity", "Blender"],
+        "This is the game that our team created at GIMJAM ITB. A simple horror game when the the main character, who has a fever, is brought into a dream world and must face several obstacles to get out of the dream and finish the game",
+      tech: ["Unity", "C#", "Blender"],
       image: raturuImage,
-      demo: "#",
+      video: "/videos/raturu-demo.mp4", 
+      download: "https://baraaaa.itch.io/raturu-home-fever",
     },
     {
       title: "Freaky Hollow",
       description:
-        "A narrative-driven horror game prototype with atmospheric level design and scripted events to build suspense.",
-      tech: ["Unity", "Aseprite"],
+        "A 2D Platformer Game based on Hollow Knight references. It can dash, jump, wall jump, wall slide, and attack enemies. The game features a simple scoring system based on the number of enemies defeated.",
+      tech: ["Unity", "C#", "Aseprite"],
       image: fkImage,
-      demo: "#",
+      video: "/videos/freaky-demo.mp4",
+    },
+    {
+      title: "Cyber Security Learning Web",
+      description:
+        "A web application designed to educate users about cyber security threats and best practices. I can't publish for the sake of privacy, but it includes interactive lessons, quizzes, and a dashboard for tracking progress.",
+      tech: ["React", "TypeScript", "Node.js", "Firebase"],
+      image: cyberImage, 
+    },
+    {
+      title: "RUUUNNN",
+      description:
+        "A simple endless runner game featuring raycast for detecting obstacles, collectible (coins) add +100 score, and can really jump HIGH. There is no specific goal in this game what player do it's actually just run",
+      tech: ["Unity", "C#", "Blender"],
+      image: runImage, 
+      video: "/videos/puzzle-quest-demo.mp4", 
+    },
+    {
+      title: "Ultimate Rizzler",
+      description:
+        "An Space Shooter game also the first game i created. Like the other space shooter game, you can move left and right, and shoot. The game features a simple scoring system based on the number of enemies defeated.  And in this game we fighting PAPI LEBRON and BIG BLACK PAPI LEBRON for the bosses",
+      tech: ["Unity", "C#", "Aseprite"],
+      image: spaceImage,  
+      video: "/videos/ai-chat-demo.mp4", 
     },
   ];
 
@@ -217,17 +344,9 @@ export default function Projects() {
                       className="flex flex-col md:flex-row gap-6"
                     >
                       <div className="md:w-1/2">
-                        <img
-                          src={otherProjects[selectedProjectIndex].image}
-                          alt={otherProjects[selectedProjectIndex].title}
-                          loading="lazy"
-                          decoding="async"
-                          className="w-full h-full object-cover rounded-lg border border-blue-200/50 shadow-sm"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src =
-                              "https://placehold.co/600x400/ffedd5/f97316?text=IMAGE+N/A";
-                          }}
-                        />
+                        <div className="relative rounded-lg overflow-hidden border border-blue-200/50 shadow-sm">
+                          <InteractiveMedia project={otherProjects[selectedProjectIndex]} />
+                        </div>
                       </div>
                       <div className="md:w-1/2 flex flex-col">
                         <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-grow">
@@ -246,15 +365,17 @@ export default function Projects() {
                           )}
                         </div>
                         <div className="flex space-x-4 mt-auto pt-4 border-t border-blue-200/50">
-                          <a
-                            href={otherProjects[selectedProjectIndex].demo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
-                          >
-                            <ExternalLink size={18} />
-                            <span>Watch Demo</span>
-                          </a>
+                          {otherProjects[selectedProjectIndex].download && (
+                            <a
+                              href={otherProjects[selectedProjectIndex].download}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
+                            >
+                              <Download size={18} />
+                              <span>Download</span>
+                            </a>
+                          )}
                         </div>
                       </div>
                     </motion.div>
