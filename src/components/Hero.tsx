@@ -53,6 +53,8 @@ export default function Hero() {
           >
             <TypeAnimation
               sequence={[
+                "<Web Developer />",
+                2000,
                 "<Game Developer />",
                 2000,
               ]}
@@ -65,7 +67,7 @@ export default function Hero() {
             variants={itemVariants}
             className="text-gray-700 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-8"
           >
-           "Developing innovative games with a focus on immersive gameplay and compelling mechanics."
+           Creating innovative web applications and immersive games with modern tools and techniques
           </motion.p>{" "}
           <motion.div
             variants={itemVariants}

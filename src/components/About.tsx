@@ -79,13 +79,13 @@ export default function About() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* --- Pod 1: Bio --- */}
           <div className="lg:col-span-2">
-            <DataPod title="[ Player Profile ]">
+            <DataPod title="[ Developer Profile ]">
               <p>
-                As a game developer, I focus on building engaging gameplay
-                mechanics and immersive virtual worlds. I believe the best games
-                come from a love for both the art and the science of creation.
-                I'm constantly learning and enjoy turning complex ideas into
-                fun, polished experiences.
+                As a versatile developer, I specialize in creating both web applications 
+                and immersive gaming experiences. I'm passionate about crafting clean, efficient code 
+                and turning complex ideas into polished, user-friendly solutions. Whether it's building 
+                responsive websites or developing engaging game mechanics, I believe the best projects 
+                come from a blend of technical expertise and creative vision.
               </p>
             </DataPod>
           </div>
@@ -118,10 +118,10 @@ export default function About() {
                   <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                   <div>
                     <h4 className="font-semibold text-blue-800">
-                      Building Interactive Experiences
+                      Web & Game Development
                     </h4>
                     <p className="text-sm text-gray-600">
-                      Crafting web apps and games
+                      Building modern web applications and interactive games
                     </p>
                   </div>
                 </div>
@@ -130,10 +130,10 @@ export default function About() {
                   <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                   <div>
                     <h4 className="font-semibold text-blue-800">
-                      Learning & Experimenting
+                      Innovation & Problem Solving
                     </h4>
                     <p className="text-sm text-gray-600">
-                      Always exploring new tech and creative solutions
+                      Exploring modern technologies and creative solutions
                     </p>
                   </div>
                 </div>
