@@ -201,7 +201,7 @@ function SkillCard({
   );
 }
 
-// --- Carousel Component with Orange Theme ---
+// --- Enhanced Carousel Component with Better Mobile Support ---
 const SkillCarousel = ({
   category,
   skills,
@@ -213,6 +213,43 @@ const SkillCarousel = ({
   }[];
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  // Enhanced touch/mouse drag handling
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeft(scrollRef.current.scrollLeft);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!scrollRef.current) return;
+    setIsDragging(true);
+    setStartX(e.touches[0].pageX - scrollRef.current.offsetLeft);
+    setScrollLeft(scrollRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || !scrollRef.current) return;
+    const x = e.touches[0].pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleEnd = () => {
+    setIsDragging(false);
+  };
 
   return (
     <div className="mb-8 sm:mb-12">
@@ -222,13 +259,19 @@ const SkillCarousel = ({
       <div className="relative">
         <motion.div
           ref={scrollRef}
-          className="flex space-x-3 sm:space-x-4 md:space-x-6 lg:space-x-8 overflow-x-auto pb-4 px-2 sm:px-4 md:px-0 horizontal-scrollbar snap-x snap-mandatory scroll-smooth"
-          whileTap={{ cursor: "grabbing" }}
+          className="flex space-x-3 sm:space-x-4 md:space-x-6 lg:space-x-8 overflow-x-auto pb-4 px-2 sm:px-4 md:px-0 snap-x snap-mandatory scroll-smooth cursor-grab active:cursor-grabbing horizontal-scrollbar touch-scroll"
           style={{
-            scrollbarWidth: 'thin',
-            scrollbarColor: '#2563eb #e5e7eb',
-            WebkitOverflowScrolling: 'touch'
+            scrollBehavior: isDragging ? 'auto' : 'smooth',
+            WebkitTapHighlightColor: 'transparent'
           }}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleEnd}
+          onMouseLeave={handleEnd}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleEnd}
+          whileTap={{ cursor: "grabbing" }}
         >
           {skills.map((skill, index) => (
             <motion.div
@@ -237,16 +280,50 @@ const SkillCarousel = ({
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ root: scrollRef, once: true }}
-              className="snap-center"
+              className="snap-center no-select"
+              style={{ 
+                pointerEvents: isDragging ? 'none' : 'auto'
+              }}
             >
               <SkillCard skill={skill} />
             </motion.div>
           ))}
         </motion.div>
         
-        {/* Mobile scroll indicator */}
+        {/* Enhanced Mobile scroll indicator */}
         <div className="block sm:hidden text-center mt-2">
-          <p className="text-xs text-gray-500">← Swipe to explore more →</p>
+          <p className="text-xs text-gray-500 animate-pulse">← Drag or swipe to explore more →</p>
+        </div>
+        
+        {/* Desktop navigation arrows */}
+        <div className="hidden md:block">
+          <button
+            onClick={() => {
+              if (scrollRef.current) {
+                scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+              }
+            }}
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white border border-blue-200 rounded-full p-2 shadow-lg transition-all duration-300 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
+            aria-label={`Scroll ${category} skills left`}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-blue-600">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          
+          <button
+            onClick={() => {
+              if (scrollRef.current) {
+                scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+              }
+            }}
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white border border-blue-200 rounded-full p-2 shadow-lg transition-all duration-300 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
+            aria-label={`Scroll ${category} skills right`}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-blue-600">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -320,15 +397,21 @@ export default function Skills() {
         </div>
 
         <div className="space-y-12 sm:space-y-16">
-          <SkillCarousel
-            category="Game Development"
-            skills={skillsData.gameDev}
-          />
-          <SkillCarousel category="Frontend" skills={skillsData.frontend} />
-          <SkillCarousel
-            category="Backend & Tools"
-            skills={skillsData.backend}
-          />
+          <div className="group">
+            <SkillCarousel
+              category="Game Development"
+              skills={skillsData.gameDev}
+            />
+          </div>
+          <div className="group">
+            <SkillCarousel category="Frontend" skills={skillsData.frontend} />
+          </div>
+          <div className="group">
+            <SkillCarousel
+              category="Backend & Tools"
+              skills={skillsData.backend}
+            />
+          </div>
         </div>
       </div>
     </section>
