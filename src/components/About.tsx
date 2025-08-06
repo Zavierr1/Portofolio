@@ -98,7 +98,7 @@ export default function About() {
                   <span className="text-sm font-medium text-gray-600">
                     Projects
                   </span>
-                  <span className="font-bold text-blue-700">7</span>
+                  <span className="font-bold text-blue-700">9</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium text-gray-600">
