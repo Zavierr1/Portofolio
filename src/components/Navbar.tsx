@@ -113,8 +113,11 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto">
         {/* Glassmorphism Card Container */}
         <div
-          className={`relative backdrop-blur-sm bg-white border border-blue-200/50 rounded-3xl shadow-lg hover:shadow-xl hover:shadow-blue-800/10 transition-all duration-300 ${scrolled || isOpen ? "shadow-xl shadow-blue-800/10" : ""
-            }`}
+          className={`relative rounded-3xl border transition-all duration-300 backdrop-blur-xl ${
+            scrolled || isOpen
+              ? "bg-white/70 border-blue-200/60 shadow-xl shadow-blue-800/10"
+              : "bg-white/40 border-blue-200/40 shadow-lg hover:shadow-xl hover:shadow-blue-800/10"
+          } before:content-[''] before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-200/30 before:to-blue-100/10 before:opacity-60 before:pointer-events-none`}
         >
 
           <div className="flex justify-between items-center py-4 px-6 md:px-8">
