@@ -14,9 +14,11 @@ import {
   SiBlender,
   SiGit,
   SiVite,
+  SiPython,
 } from "react-icons/si";
 import { FaPaintBrush } from "react-icons/fa"; // For fallback icons
 import AsepriteIcon from "../assets/icons/aseprite.png";
+import PhaserIcon from "../assets/icons/Phaser.png"
 
 // --- Animated Title (matching About.tsx) ---
 const AnimatedTitle = ({ text }: { text: string }) => {
@@ -62,6 +64,10 @@ function SkillIcon({
         return SiGit;
       case "vite":
         return SiVite;
+      case "python":
+        return SiPython;
+      case "phaser.js":
+        return "image"; 
       case "aseprite":
         return "image"; // Special case for image
       default:
@@ -96,10 +102,10 @@ function SkillIcon({
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="relative"
       >
-        {/* Handle special case for Aseprite image */}
+        {/* Handle special case for custom images */}
         {IconComponent === "image" ? (
           <img
-            src={AsepriteIcon}
+            src={skillName.toLowerCase() === "phaser.js" ? PhaserIcon : AsepriteIcon}
             alt={skillName}
             className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain"
             style={{
@@ -109,6 +115,7 @@ function SkillIcon({
               transition: "all 0.3s ease",
             }}
           />
+          
         ) : (
           <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center">
             <IconComponent
@@ -221,38 +228,62 @@ const SkillGrid = ({
 export default function Skills() {
   // --- Data organized by category for clean display ---
   const skillsData = {
-    gameDev: [
+    Languages: [
       {
-        name: "Unity",
-        level: "Advanced",
-      },
-      {
-        name: "C#",
-        level: "Intermediate",
-      },
-    ],
-    frontend: [
-      {
-        name: "React",
-        level: "Learning",
-      },
-      {
-        name: "Three.js",
-        level: "Learning",
+        name: "JavaScript",
+        level: "Basic",
       },
       {
         name: "TypeScript",
         level: "Learning",
       },
       {
-        name: "JavaScript",
+        name: "C#",
+        level: "Intermediate",
+      },
+      {
+        name: "Python",
         level: "Learning",
       },
     ],
-    tools: [
+    GameDev: [
+      {
+        name: "Unity",
+        level: "Advanced",
+      },
+      {
+        name: "Phaser.js",
+        level: "Learning",
+      },
+    ],
+    Frontend: [
+      {
+        name: "React",
+        level: "Basic",
+      },
+      {
+        name: "Three.js",
+        level: "Learning",
+      },
+    ],
+    Backend: [
       {
         name: "Node.js",
+        level: "Basic",
+      },
+      {
+        name: "Python",
         level: "Learning",
+      },
+    ],
+    Tools: [
+      {
+        name: "Git",
+        level: "Advanced",
+      },
+      {
+        name: "Vite",
+        level: "Basic",
       },
       {
         name: "Blender",
@@ -261,14 +292,6 @@ export default function Skills() {
       {
         name: "Aseprite",
         level: "Intermediate",
-      },
-      {
-        name: "Git",
-        level: "Advanced",
-      },
-      {
-        name: "Vite",
-        level: "Basic",
       },
     ],
   };
@@ -289,15 +312,11 @@ export default function Skills() {
         </div>
 
         <div className="space-y-8 sm:space-y-12">
-          <SkillGrid category="Game Development" skills={skillsData.gameDev} />
-          <SkillGrid
-            category="Frontend Development"
-            skills={skillsData.frontend}
-          />
-          <SkillGrid
-            category="Tools & Technologies"
-            skills={skillsData.tools}
-          />
+          <SkillGrid category="Programming Languages" skills={skillsData.Languages} />
+          <SkillGrid category="Game Development" skills={skillsData.GameDev} />
+          <SkillGrid category="Frontend Development" skills={skillsData.Frontend} />
+          <SkillGrid category="Backend Development" skills={skillsData.Backend} />
+          <SkillGrid category="Tools & Technologies" skills={skillsData.Tools} />
         </div>
       </div>
     </section>
